@@ -21,6 +21,7 @@ let releaseAutoScrollTimer: ReturnType<typeof setTimeout> | null = null
 let resetWheelAccumulatorTimer: ReturnType<typeof setTimeout> | null = null
 
 const forceShowRadioPlayer = ref(false)
+const currentYear = new Date().getFullYear()
 
 function onListenNow() {
   forceShowRadioPlayer.value = true
@@ -95,6 +96,15 @@ function onWheel(event: WheelEvent) {
 
   const closestIndex = getClosestSectionIndex()
   if (closestIndex === -1) return
+  const isScrollingDown = event.deltaY > 0
+  const isAtFirstSection = closestIndex === 0
+  const isAtLastSection = closestIndex === sectionEls.length - 1
+
+  // Allow native scrolling past the first/last snap section so footer and top area stay reachable.
+  if ((isAtLastSection && isScrollingDown) || (isAtFirstSection && !isScrollingDown)) {
+    wheelDeltaAccumulator = 0
+    return
+  }
 
   const activeSection = sectionEls[closestIndex]
   if (shouldUseNativeScroll(event, activeSection)) {
@@ -161,6 +171,17 @@ onBeforeUnmount(() => {
     <ProjectsSliderSection />
     <RadioSection @listen-now="onListenNow" />
   </main>
+  <footer class="border-t border-red-700/20 bg-[#f7ebe2] px-5 pt-4 pb-[calc(6rem+env(safe-area-inset-bottom))] text-center text-xs text-red-700 sm:pb-6 md:px-8 md:py-4 md:text-sm">
+    &copy; {{ currentYear }}. Developed by <a
+      href="https://driesbielen.be"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="ml-1 font-semibold"
+    >
+      Dries Bielen
+    </a>.
+    
+  </footer>
 
   <RadioNowPlayingWidget :force-visible="forceShowRadioPlayer" @close="onCloseRadioPlayer" />
 </template>

@@ -170,15 +170,15 @@ watch([activeIndex, isUnmuted, volume], async () => {
         <h2 class="font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.9] uppercase">Projecten</h2>
       </div>
 
-      <div class="grid gap-4 lg:grid-cols-[1.9fr_1fr] lg:gap-6">
+      <div class="grid gap-4 lg:grid-cols-[1fr_1.9fr] lg:gap-6">
         <div
-          class="featured-card overflow-hidden rounded-3xl border border-red-700/25 bg-[#f7e8dc] shadow-[0_18px_35px_rgba(0,0,0,0.13)]"
+          class="featured-card order-2 overflow-hidden rounded-3xl border border-red-700/25 bg-[#f7e8dc] shadow-[0_18px_35px_rgba(0,0,0,0.13)]"
           @mouseenter="isPaused = true"
           @mouseleave="isPaused = false"
         >
           <Transition name="project-fade" mode="out-in">
             <article :key="activeProject.title">
-              <div class="relative h-[260px] overflow-hidden sm:h-[310px] md:h-[360px]">
+              <div class="relative h-[220px] overflow-hidden min-[420px]:h-[250px] sm:h-[310px] md:h-[360px]">
                 <video
                   v-if="activeProject.mediaType === 'video'"
                   ref="activeVideoEl"
@@ -209,7 +209,7 @@ watch([activeIndex, isUnmuted, volume], async () => {
                 >
                   <button
                     type="button"
-                    class="unmute-cta rounded-2xl border-2 border-[#f9ede4] bg-red-700 px-6 py-4 text-center text-[0.86rem] font-black uppercase tracking-[0.11em] text-[#f9ede4] shadow-[0_14px_28px_rgba(0,0,0,0.35)] transition hover:scale-[1.02] hover:bg-[#a90d10]"
+                    class="unmute-cta rounded-2xl border-2 border-[#f9ede4] bg-red-700 px-4 py-3 text-center text-[0.78rem] font-black uppercase tracking-[0.11em] text-[#f9ede4] shadow-[0_14px_28px_rgba(0,0,0,0.35)] transition hover:scale-[1.02] hover:bg-[#a90d10] min-[420px]:px-6 min-[420px]:py-4 min-[420px]:text-[0.86rem]"
                     :aria-pressed="false"
                     @click="toggleAudio"
                   >
@@ -230,7 +230,7 @@ watch([activeIndex, isUnmuted, volume], async () => {
                     Mute
                   </button>
                   <div
-                    class="pointer-events-none flex items-center gap-2 rounded-full border border-[#f9ede4]/70 bg-black/55 px-3 py-1.5 opacity-0 transition group-hover/volume:pointer-events-auto group-hover/volume:opacity-100 group-focus-within/volume:pointer-events-auto group-focus-within/volume:opacity-100"
+                    class="flex items-center gap-2 rounded-full border border-[#f9ede4]/70 bg-black/55 px-3 py-1.5 opacity-100 transition md:pointer-events-none md:opacity-0 md:group-hover/volume:pointer-events-auto md:group-hover/volume:opacity-100 md:group-focus-within/volume:pointer-events-auto md:group-focus-within/volume:opacity-100"
                   >
                     <input
                       v-model.number="volume"
@@ -248,12 +248,12 @@ watch([activeIndex, isUnmuted, volume], async () => {
                 </div>
               </div>
 
-              <div class="space-y-3 p-5 md:p-6">
+              <div class="space-y-3 p-4 min-[420px]:p-5 md:p-6">
                 <h3 class="font-display text-[clamp(1.55rem,4vw,3rem)] leading-[0.92] uppercase">
                   {{ activeProject.title }}
                 </h3>
 
-                <p class="max-w-[66ch] text-[clamp(0.95rem,1.2vw,1.08rem)] leading-[1.45] text-red-700/90">
+                <p class="max-w-[80ch] text-[clamp(0.95rem,1.2vw,1.08rem)] leading-[1.45] text-red-700/90">
                   {{ activeProject.summary }}
                 </p>
 
@@ -276,20 +276,20 @@ watch([activeIndex, isUnmuted, volume], async () => {
                     :href="activeProject.link"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-flex items-center rounded-full border border-red-700 px-4 py-1.5 text-[0.78rem] font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4]"
+                    class="inline-flex items-center rounded-full border border-red-700 px-3 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4] min-[420px]:px-4 min-[420px]:text-[0.78rem]"
                   >
                     {{ activeProject.linkLabel }}
                   </a>
                   <button
                     type="button"
-                    class="inline-flex items-center rounded-full border border-red-700/35 px-3 py-1.5 text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-red-700/80 transition hover:border-red-700"
+                    class="inline-flex items-center rounded-full border border-red-700/35 px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-red-700/80 transition hover:border-red-700 min-[420px]:text-[0.75rem]"
                     @click="prevProject"
                   >
                     Vorige
                   </button>
                   <button
                     type="button"
-                    class="inline-flex items-center rounded-full border border-red-700/35 px-3 py-1.5 text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-red-700/80 transition hover:border-red-700"
+                    class="inline-flex items-center rounded-full border border-red-700/35 px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-red-700/80 transition hover:border-red-700 min-[420px]:text-[0.75rem]"
                     @click="nextProject"
                   >
                     Volgende
@@ -300,7 +300,7 @@ watch([activeIndex, isUnmuted, volume], async () => {
           </Transition>
         </div>
 
-        <aside class="project-list rounded-3xl border border-red-700/20 bg-[#f9ede4] p-3 shadow-[0_12px_24px_rgba(0,0,0,0.1)] md:p-4">
+        <aside class="project-list order-1 rounded-3xl border border-red-700/20 bg-[#f9ede4] p-3 shadow-[0_12px_24px_rgba(0,0,0,0.1)] md:p-4">
           <p class="mb-3 text-[0.72rem] font-bold uppercase tracking-[0.13em] text-red-700/70">Projectlijst</p>
 
           <ol class="space-y-2">
@@ -358,9 +358,4 @@ watch([activeIndex, isUnmuted, volume], async () => {
   background: rgba(200, 15, 18, 0.5);
 }
 
-@media (max-width: 1024px) {
-  .project-list {
-    order: 2;
-  }
-}
 </style>

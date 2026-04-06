@@ -71,7 +71,7 @@ onBeforeUnmount(() => {
   <Teleport to="body">
     <aside
       v-if="shouldRender"
-      class="fixed bottom-4 right-4 z-[70] w-[min(360px,calc(100vw-2rem))] rounded-2xl border border-red-700/35 bg-[#f9ede4]/98 p-3 shadow-[0_18px_34px_rgba(0,0,0,0.24)] backdrop-blur"
+      class="fixed bottom-3 left-1/2 z-[70] w-[min(360px,calc(100vw-1.2rem))] -translate-x-1/2 rounded-2xl border border-red-700/35 bg-[#f9ede4]/98 p-3 shadow-[0_18px_34px_rgba(0,0,0,0.24)] backdrop-blur sm:bottom-4 sm:left-auto sm:right-4 sm:w-[min(360px,calc(100vw-2rem))] sm:translate-x-0"
     >
       <div class="mb-2 flex items-center justify-between gap-3">
         <p class="text-[0.66rem] font-bold uppercase tracking-[0.14em] text-red-700/75">Now Playing</p>
