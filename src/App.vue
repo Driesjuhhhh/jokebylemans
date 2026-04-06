@@ -171,7 +171,7 @@ onBeforeUnmount(() => {
     <ProjectsSliderSection />
     <RadioSection @listen-now="onListenNow" />
   </main>
-  <footer class="border-t border-red-700/20 bg-[#f7ebe2] px-5 pt-4 pb-[calc(6rem+env(safe-area-inset-bottom))] text-center text-xs text-red-700 sm:pb-6 md:px-8 md:py-4 md:text-sm">
+  <footer class="border-t border-red-700/20 bg-[#f7ebe2] px-5 pt-4 pb-[calc(1.1rem+env(safe-area-inset-bottom))] text-center text-xs text-red-700 md:px-8 md:py-4 md:text-sm">
     &copy; {{ currentYear }}. Developed by <a
       href="https://driesbielen.be"
       target="_blank"
