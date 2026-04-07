@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const links = [
   { href: '#wie-ben-ik', label: 'Wie ben ik' },
-  { href: '#educatie', label: 'Educatie' },
+  { href: '#opleiding', label: 'Opleiding' },
   { href: '#projecten', label: 'Projecten' },
   { href: '#radio-mol', label: 'Radio' },
 ]

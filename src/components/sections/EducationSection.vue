@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SlideSection from './SlideSection.vue'
 
-import batacCutting from '../../assets/batac-cutting2.jpg'
+import batacCutting from '../../assets/batac-cutting.jpeg'
 import pxlMicImage from '../../assets/rm-mic.jpeg'
 
 type EducationItem = {
@@ -12,6 +12,7 @@ type EducationItem = {
   highlight: string
   imageSrc: string
   imageAlt: string
+  imagePositionClass?: string
 }
 
 const educations: EducationItem[] = [
@@ -30,23 +31,25 @@ const educations: EducationItem[] = [
     institution: 'Thomas More',
     program: 'BATAC - Multicamera',
     description: 'Tijdens deze opleiding leerde ik enorm veel bij over hoe tv-programma’s achter de schermen gemaakt worden; zowel op productioneel als redactioneel vlak. Ik verbreedde hierdoor mijn kennis over het medialandschap én legde connecties.',
-    highlight: 'Een eigen studio show!',
+    highlight: 'Een eigen studioshow!',
     imageSrc: batacCutting,
     imageAlt: 'Joke in de studio van Radio Mol',
+    imagePositionClass: 'object-[50%_61%]',
   },
+  
 ]
 </script>
 
 <template>
   <SlideSection
-    id="educatie"
+    id="opleiding"
     aos="fade-left"
     :aos-delay="110"
     section-class="snap-start flex items-start !min-h-[100svh] !pt-10 !pb-4 md:!pt-12"
   >
     <div class="mx-auto w-full max-w-[1320px]">
       <div class="mb-4 flex items-end justify-between gap-4">
-        <h2 class="font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.9] uppercase">Educatie</h2>
+        <h2 class="font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.9] uppercase">Opleiding</h2>
       </div>
 
       <div class="timeline relative space-y-4 md:space-y-5">
@@ -84,7 +87,10 @@ const educations: EducationItem[] = [
               <img
                 :src="item.imageSrc"
                 :alt="item.imageAlt"
-                class="h-[180px] w-full rounded-xl object-cover md:h-[250px] lg:h-[280px]"
+                :class="[
+                  'h-[180px] w-full rounded-xl object-cover md:h-[250px] lg:h-[280px]',
+                  item.imagePositionClass ?? ''
+                ]"
               />
             </figure>
           </div>

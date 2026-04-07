@@ -65,7 +65,7 @@ const projects: ProjectItem[] = [
     kind: 'Talkshow',
     summary:
       'En ook al sta ik meestal achter de camera, mocht ik tijdens deze talkshow voor de camera plaatsnemen.',
-    role: 'Gast voor de camera',
+    role: 'Presentatrice',
     mediaSrc: tsjernobyl,
     mediaAlt: 'Still van de talkshow 40 Jaar Tsjernobyl',
     mediaType: 'image',

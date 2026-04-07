@@ -5,35 +5,55 @@ import SlideSection from './SlideSection.vue'
 <template>
   <SlideSection
     id="hero"
-    section-class="snap-start flex flex-col items-center justify-center text-center"
+    section-class="snap-start relative mt-15 overflow-hidden flex items-center justify-center text-center !max-w-none !px-0"
   >
-    <h1 class="hero-word" aria-label="Portfolio">
-      <span class="hero-shadow" aria-hidden="true">PORTFOLIO</span>
-      <span class="hero-main">PORTFOLIO</span>
-    </h1>
-    <p class="hero-name">JOKE BYLEMANS</p>
-    <div class="hero-socials">
-      <a
-        href="https://www.instagram.com/blokkemetjokke/"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="hero-social-btn"
-      >
-        Blokke Met Jokke
-      </a>
-      <a
-        href="https://www.linkedin.com/in/joke-bylemans-04088025b/"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="hero-social-btn"
-      >
-        LinkedIn
+    <div class="hero-content">
+      <h1 class="hero-word" aria-label="Portfolio">
+        <span class="hero-shadow" aria-hidden="true">PORTFOLIO</span>
+        <span class="hero-main">PORTFOLIO</span>
+      </h1>
+      <p class="hero-name">JOKE BYLEMANS</p>
+      <p class="hero-tagline">Presentatrice · Voice-over · Radio Mol</p>
+
+      <div class="hero-socials">
+        <a
+          href="https://www.instagram.com/blokkemetjokke/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hero-social-btn"
+        >
+          Blokke Met Jokke
+        </a>
+        <a
+          href="https://www.linkedin.com/in/joke-bylemans-04088025b/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hero-social-btn"
+        >
+          LinkedIn
+        </a>
+      </div>
+
+      <a href="#wie-ben-ik" class="hero-scroll" aria-label="Scroll naar Wie ben ik">
+        <span class="hero-scroll-label">Scroll</span>
+        <span class="hero-scroll-track" aria-hidden="true">
+          <span class="hero-scroll-arrow"></span>
+        </span>
       </a>
     </div>
   </SlideSection>
 </template>
 
 <style scoped>
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 3vw, 2.5rem);
+}
+
 .hero-word {
   position: relative;
   display: inline-block;
@@ -67,6 +87,16 @@ import SlideSection from './SlideSection.vue'
   -webkit-text-stroke: 2px #c80f12;
 }
 
+.hero-tagline {
+  margin: clamp(0.35rem, 1.4vw, 0.85rem) auto 0;
+  max-width: 40ch;
+  font-size: clamp(0.84rem, 1.2vw, 1.03rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(200, 15, 18, 0.82);
+}
+
 .hero-socials {
   margin-top: clamp(1rem, 2.5vw, 2rem);
   display: flex;
@@ -94,6 +124,59 @@ import SlideSection from './SlideSection.vue'
   transform: translateY(-1px);
 }
 
+.hero-scroll {
+  margin-top: clamp(1.1rem, 2.8vw, 2.1rem);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.hero-scroll-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(200, 15, 18, 0.8);
+}
+
+.hero-scroll-track {
+  display: block;
+  width: 2px;
+  height: 2.4rem;
+  background: linear-gradient(to bottom, rgba(200, 15, 18, 0.2), rgba(200, 15, 18, 0.75));
+  position: relative;
+  border-radius: 999px;
+}
+
+.hero-scroll-arrow {
+  position: absolute;
+  left: 50%;
+  bottom: -0.16rem;
+  width: 0.58rem;
+  height: 0.58rem;
+  border-right: 2px solid #c80f12;
+  border-bottom: 2px solid #c80f12;
+  transform: translateX(-50%) rotate(45deg);
+  animation: hero-scroll-arrow 1.6s ease-in-out infinite;
+}
+
+@keyframes hero-scroll-arrow {
+  0% {
+    transform: translate(-50%, -0.18rem) rotate(45deg);
+    opacity: 0.45;
+  }
+  60% {
+    transform: translate(-50%, 0.16rem) rotate(45deg);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate(-50%, -0.18rem) rotate(45deg);
+    opacity: 0.45;
+  }
+}
+
 @media (max-width: 768px) {
   .hero-shadow {
     transform: translate(0.16rem, -0.16rem);
@@ -109,6 +192,10 @@ import SlideSection from './SlideSection.vue'
     width: min(90vw, 290px);
     margin-inline: auto;
     align-items: center;
+  }
+
+  .hero-scroll {
+    margin-top: 1.2rem;
   }
 }
 </style>

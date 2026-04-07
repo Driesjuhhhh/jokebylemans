@@ -86,7 +86,7 @@ function shouldUseNativeScroll(event: WheelEvent, section: HTMLElement) {
 }
 
 function onWheel(event: WheelEvent) {
-  if (event.ctrlKey || !sectionEls.length || window.innerWidth < 900) return
+  if (event.ctrlKey || !sectionEls.length || window.innerWidth < 1024) return
   if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return
 
   if (isAutoScrolling) {
@@ -164,14 +164,22 @@ onBeforeUnmount(() => {
 
 <template>
   <HeaderNavigation />
-  <main class="portfolio-bg text-red-700">
-    <HeroSection />
-    <WhoAmISection />
-    <EducationSection />
-    <ProjectsSliderSection />
-    <RadioSection @listen-now="onListenNow" />
+  <main class="portfolio-bg relative text-red-700">
+    <div class="site-bubbles" aria-hidden="true">
+      <span class="bubble bubble-left"></span>
+      <span class="bubble bubble-center"></span>
+      <span class="bubble bubble-right"></span>
+    </div>
+
+    <div class="relative z-10">
+      <HeroSection />
+      <WhoAmISection />
+      <EducationSection />
+      <ProjectsSliderSection />
+      <RadioSection @listen-now="onListenNow" />
+    </div>
   </main>
-  <footer class="border-t border-red-700/20 bg-[#f7ebe2] px-5 pt-4 pb-[calc(1.1rem+env(safe-area-inset-bottom))] text-center text-xs text-red-700 md:px-8 md:py-4 md:text-sm">
+  <footer class="relative z-10 border-t border-red-700/20 bg-[#f7ebe2] px-5 pt-4 pb-[calc(1.1rem+env(safe-area-inset-bottom))] text-center text-xs text-red-700 md:px-8 md:py-4 md:text-sm">
     &copy; {{ currentYear }}. Developed by <a
       href="https://driesbielen.be"
       target="_blank"
@@ -180,8 +188,46 @@ onBeforeUnmount(() => {
     >
       Dries Bielen
     </a>.
-    
+
   </footer>
 
   <RadioNowPlayingWidget :force-visible="forceShowRadioPlayer" @close="onCloseRadioPlayer" />
 </template>
+
+<style scoped>
+.site-bubbles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.2) 0%, rgba(200, 15, 18, 0.12) 55%, rgba(200, 15, 18, 0.05) 100%);
+}
+
+.bubble-left {
+  width: clamp(280px, 34vw, 520px);
+  height: clamp(280px, 34vw, 520px);
+  left: clamp(-160px, -10vw, -40px);
+  top: clamp(90px, 16vh, 180px);
+}
+
+.bubble-center {
+  width: clamp(200px, 26vw, 380px);
+  height: clamp(200px, 26vw, 380px);
+  left: 50%;
+  top: clamp(46vh, 52vh, 58vh);
+  transform: translateX(-50%);
+}
+
+.bubble-right {
+  width: clamp(320px, 40vw, 620px);
+  height: clamp(320px, 40vw, 620px);
+  right: clamp(-220px, -14vw, -60px);
+  bottom: clamp(-80px, 0vh, 90px);
+}
+</style>
