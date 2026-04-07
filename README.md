@@ -4,7 +4,7 @@ This template should help get you started developing with Vue 3 and TypeScript i
 
 Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
 
-## Deploy naar GitHub Pages via npm
+## Deploy naar GitHub Pages met custom domain
 
 1. Zorg dat je `main` branch op GitHub staat.
 2. Run lokaal:
@@ -13,3 +13,7 @@ npm run deploy
 ```
 3. Dit voert eerst `npm run build` uit en pusht daarna `dist` naar de `gh-pages` branch.
 4. In GitHub: `Settings` > `Pages` > `Source`: kies `Deploy from a branch` en selecteer branch `gh-pages` (root).
+5. In GitHub: `Settings` > `Pages` > `Custom domain`: zet `jokebylemans.be`.
+6. Zorg dat je DNS records voor `jokebylemans.be` correct naar GitHub Pages wijzen.
+
+Opmerking: `public/CNAME` wordt meegekopieerd naar `dist/CNAME` zodat je custom domain behouden blijft bij elke deploy.

@@ -4,6 +4,7 @@ const links = [
   { href: '#opleiding', label: 'Opleiding' },
   { href: '#projecten', label: 'Projecten' },
   { href: '#radio-mol', label: 'Radio' },
+  { href: '#contact', label: 'Contact' },
 ]
 </script>
 

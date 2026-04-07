@@ -78,6 +78,7 @@ const projects: ProjectItem[] = [
 const activeIndex = ref(0)
 const isPaused = ref(false)
 const isUnmuted = ref(false)
+const isAutoplayEnabled = ref(true)
 const volume = ref(0.85)
 const autoplayMs = 6000
 const activeVideoEl = ref<HTMLVideoElement | null>(null)
@@ -95,7 +96,8 @@ function syncAudioState() {
 function goTo(index: number) {
   activeIndex.value = index
   syncAudioState()
-  restartAutoplay()
+  isAutoplayEnabled.value = false
+  stopAutoplay()
 }
 
 function nextProject() {
@@ -103,17 +105,28 @@ function nextProject() {
   syncAudioState()
 }
 
+function nextProjectManually() {
+  nextProject()
+  isAutoplayEnabled.value = false
+  stopAutoplay()
+}
+
 function prevProject() {
   activeIndex.value = (activeIndex.value - 1 + projects.length) % projects.length
   syncAudioState()
-  restartAutoplay()
+}
+
+function prevProjectManually() {
+  prevProject()
+  isAutoplayEnabled.value = false
+  stopAutoplay()
 }
 
 function startAutoplay() {
   if (autoplayTimer) return
 
   autoplayTimer = setInterval(() => {
-    if (!isPaused.value && !isUnmuted.value) {
+    if (isAutoplayEnabled.value && !isPaused.value && !isUnmuted.value) {
       nextProject()
     }
   }, autoplayMs)
@@ -123,11 +136,6 @@ function stopAutoplay() {
   if (!autoplayTimer) return
   clearInterval(autoplayTimer)
   autoplayTimer = null
-}
-
-function restartAutoplay() {
-  stopAutoplay()
-  startAutoplay()
 }
 
 function toggleAudio() {
@@ -283,14 +291,14 @@ watch([activeIndex, isUnmuted, volume], async () => {
                   <button
                     type="button"
                     class="inline-flex items-center rounded-full border border-red-700/35 px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-red-700/80 transition hover:border-red-700 min-[420px]:text-[0.75rem]"
-                    @click="prevProject"
+                    @click="prevProjectManually"
                   >
                     Vorige
                   </button>
                   <button
                     type="button"
                     class="inline-flex items-center rounded-full border border-red-700/35 px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-red-700/80 transition hover:border-red-700 min-[420px]:text-[0.75rem]"
-                    @click="nextProject"
+                    @click="nextProjectManually"
                   >
                     Volgende
                   </button>

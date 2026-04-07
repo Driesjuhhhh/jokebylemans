@@ -76,6 +76,10 @@ body {
 }
 
 @media (max-width: 900px) {
+  html {
+    scroll-snap-type: none;
+  }
+
   .media-tile {
     height: 180px;
   }

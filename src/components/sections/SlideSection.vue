@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   sectionClass?: string
-  aos?: string
+  aos?: string | false
   aosDelay?: number
 }>()
 </script>
@@ -14,8 +14,8 @@ defineProps<{
     ]"
   >
     <div
-      :data-aos="aos ?? 'fade-up'"
-      :data-aos-delay="aosDelay ?? 0"
+      :data-aos="aos === false ? undefined : (aos ?? 'fade-up')"
+      :data-aos-delay="aos === false ? undefined : (aosDelay ?? 0)"
       class="w-full"
     >
       <slot />

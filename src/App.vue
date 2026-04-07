@@ -9,6 +9,7 @@ import WhoAmISection from './components/sections/WhoAmISection.vue'
 import EducationSection from './components/sections/EducationSection.vue'
 import RadioSection from './components/sections/RadioSection.vue'
 import ProjectsSliderSection from './components/sections/ProjectsSliderSection.vue'
+import ContactSection from './components/sections/ContactSection.vue'
 import RadioNowPlayingWidget from './components/RadioNowPlayingWidget.vue'
 
 const WHEEL_ADVANCE_THRESHOLD = 42
@@ -177,6 +178,7 @@ onBeforeUnmount(() => {
       <EducationSection />
       <ProjectsSliderSection />
       <RadioSection @listen-now="onListenNow" />
+      <ContactSection />
     </div>
   </main>
   <footer class="relative z-10 border-t border-red-700/20 bg-[#f7ebe2] px-5 pt-4 pb-[calc(1.1rem+env(safe-area-inset-bottom))] text-center text-xs text-red-700 md:px-8 md:py-4 md:text-sm">

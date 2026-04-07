@@ -1,10 +1,27 @@
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import SlideSection from './SlideSection.vue'
+
+const disableAosOnMobile = ref(false)
+
+function updateAosMode() {
+  disableAosOnMobile.value = window.innerWidth < 1024
+}
+
+onMounted(() => {
+  updateAosMode()
+  window.addEventListener('resize', updateAosMode)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateAosMode)
+})
 </script>
 
 <template>
   <SlideSection
     id="hero"
+    :aos="disableAosOnMobile ? false : undefined"
     section-class="snap-start relative mt-15 overflow-hidden flex items-center justify-center text-center !max-w-none !px-0"
   >
     <div class="hero-content">
