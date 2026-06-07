@@ -3,6 +3,15 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import SlideSection from './SlideSection.vue'
 
 const disableAosOnMobile = ref(false)
+const cvHref = 'https://canva.link/8p8itjkd9re6m8m'
+
+function trackCvClick() {
+  ;(window as Window & { plausible?: (...args: any[]) => void }).plausible?.('CV Click')
+}
+
+function trackSocialClick(eventName: string) {
+  ;(window as Window & { plausible?: (...args: any[]) => void }).plausible?.(eventName)
+}
 
 function updateAosMode() {
   disableAosOnMobile.value = window.innerWidth < 1024
@@ -34,10 +43,20 @@ onBeforeUnmount(() => {
 
       <div class="hero-socials">
         <a
+          :href="cvHref"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hero-social-btn"
+          @click="trackCvClick"
+        >
+          CV
+        </a>
+        <a
           href="https://www.instagram.com/blokkemetjokke/"
           target="_blank"
           rel="noopener noreferrer"
           class="hero-social-btn"
+          @click="trackSocialClick('Instagram Click')"
         >
           Blokke Met Jokke
         </a>
@@ -46,6 +65,7 @@ onBeforeUnmount(() => {
           target="_blank"
           rel="noopener noreferrer"
           class="hero-social-btn"
+          @click="trackSocialClick('LinkedIn Click')"
         >
           LinkedIn
         </a>

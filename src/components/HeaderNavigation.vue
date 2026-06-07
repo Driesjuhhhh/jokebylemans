@@ -18,11 +18,11 @@ const links = [
         <span>Joke</span><span class="hidden md:inline"> Bylemans</span>
       </a>
 
-      <ul class="order-2 ml-auto flex min-w-0 items-center justify-end gap-3 overflow-x-auto md:order-2 md:ml-0 md:gap-2 md:overflow-visible">
+      <ul class="order-2 ml-auto flex min-w-0 items-center justify-end gap-3 overflow-x-auto md:order-2 md:ml-0 md:gap-4 md:overflow-visible">
         <li v-for="link in links" :key="link.href">
           <a
             :href="link.href"
-            class="block whitespace-nowrap px-0 py-0 text-[0.72rem] font-semibold uppercase tracking-[0.09em] text-red-700/90 transition hover:text-red-900 md:px-3 md:py-1.5 md:text-sm md:hover:bg-red-700 md:hover:text-[#f7ebe2]"
+            class="nav-link block whitespace-nowrap text-[0.72rem] font-semibold uppercase tracking-[0.09em] text-red-700/90 transition md:rounded-sm md:px-3 md:py-1.5 md:text-sm"
           >
             {{ link.label }}
           </a>
@@ -64,3 +64,41 @@ const links = [
     </nav>
   </header>
 </template>
+
+<style scoped>
+.nav-link {
+  position: relative;
+  color: rgb(200 15 18 / 0.9);
+  padding-inline: 0.15rem;
+  padding-bottom: 0.2rem;
+  transition: color 180ms ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  bottom: 0.05rem;
+  height: 1px;
+  border-radius: 999px;
+  background: #c80f12;
+  opacity: 0;
+  transition: all 180ms ease;
+}
+
+.nav-link:hover {
+  color: #c80f12;
+}
+
+.nav-link:hover::after {
+  left: 0;
+  right: 0;
+  opacity: 1;
+}
+
+.nav-link:focus-visible {
+  outline: 2px solid rgba(200, 15, 18, 0.45);
+  outline-offset: 2px;
+}
+</style>
