@@ -3,11 +3,11 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import SlideSection from './SlideSection.vue'
 
 const disableAosOnMobile = ref(false)
-const cvHref = 'https://canva.link/8p8itjkd9re6m8m'
+// const cvHref = 'https://canva.link/8p8itjkd9re6m8m'
 
-function trackCvClick() {
-  ;(window as Window & { plausible?: (...args: any[]) => void }).plausible?.('CV Click')
-}
+// function trackCvClick() {
+//   ;(window as Window & { plausible?: (...args: any[]) => void }).plausible?.('CV Click')
+// }
 
 function trackSocialClick(eventName: string) {
   ;(window as Window & { plausible?: (...args: any[]) => void }).plausible?.(eventName)
@@ -42,7 +42,7 @@ onBeforeUnmount(() => {
       <p class="hero-tagline">Presentatrice · Voice-over · Radio Mol</p>
 
       <div class="hero-socials">
-        <a
+        <!-- <a
           :href="cvHref"
           target="_blank"
           rel="noopener noreferrer"
@@ -50,7 +50,7 @@ onBeforeUnmount(() => {
           @click="trackCvClick"
         >
           CV
-        </a>
+        </a> -->
         <a
           href="https://www.instagram.com/blokkemetjokke/"
           target="_blank"

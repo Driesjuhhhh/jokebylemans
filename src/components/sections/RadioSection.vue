@@ -151,7 +151,7 @@ onBeforeUnmount(() => {
           <div>
             <h3 class="font-display text-[clamp(1.8rem,4.8vw,3.2rem)] leading-[0.95] uppercase">Achter de micro</h3>
             <p class="mt-2 max-w-[56ch] text-[0.97rem] leading-[1.5] text-red-700/85">
-              Een paar spontane momenten uit de studio van Radio Mol — volg er meer op Instagram.
+              Een paar spontane momenten van Radio Mol — volg er meer op Instagram.
             </p>
           </div>
           <a
