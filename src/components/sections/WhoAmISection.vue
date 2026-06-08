@@ -61,11 +61,11 @@ const showNextPhoto = () => {
         <p class="max-w-[40ch] text-left md:text-justify text-[clamp(0.95rem,1.45vw,1.45rem)] leading-[1.45]">
           Mijn naam is Joke, een vrolijke perfectionist. Elke zaterdag presenteer ik het programma ‘Blokke Met
           Jokke’ op Radio Mol, een lokale radiozender. Vanaf het moment dat ik voor een micro sta, merk ik dat er
-          automatisch een knop omslaagt in mijn hoofd. Ik sta aan en ga ervoor.
+          automatisch een knop omslaat in mijn hoofd. Ik sta aan en ga ervoor.
         </p>
         <p class="max-w-[40ch] text-left md:text-justify text-[clamp(0.95rem,1.45vw,1.45rem)] leading-[1.45]">
           Van jongs af aan ben ik bezig met mijn stem. Ik volgde dictie, deed toneel en leerde luider spreken,
-          omdat ik vroeger heel stil was. Ondertussen is mijn stem gebruiken iets waar ik me volledig in thuisvoel.
+          omdat ik vroeger heel stil was. Ondertussen is mijn stem gebruiken iets waar ik me volledig in thuis voel.
         </p>
       </div>
 

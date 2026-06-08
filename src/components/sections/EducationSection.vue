@@ -21,7 +21,7 @@ const educations: EducationItem[] = [
     institution: 'Hogeschool PXL',
     program: 'Communicatie',
     description:
-      'Tijdens deze opleiding (her)ontdekte ik mijn passie voor taal en presenteren. wIk begon mijn eigen radioprogramma; zowel op PXL Radio als op Radio Mol. ',
+      'Tijdens deze opleiding (her)ontdekte ik mijn passie voor taal en presenteren. Ik begon mijn eigen radioprogramma; zowel op PXL Radio als op Radio Mol. ',
     highlight: 'Start van mijn eigen radioprogramma op PXL Radio en Radio Mol.',
     imageSrc: pxlMicImage,
     imageAlt: 'Joke met microfoon in PXL-studio',
