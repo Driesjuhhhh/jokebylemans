@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SlideSection from './SlideSection.vue'
+import { projectFilter, type ProjectCategory } from '../../state/projectFilter'
 
 import batacCutting from '../../assets/batac-cutting.jpeg'
 import pxlMicImage from '../../assets/rm-mic.jpeg'
@@ -13,6 +14,7 @@ type EducationItem = {
   imageSrc: string
   imageAlt: string
   imagePositionClass?: string
+  projectCategory: ProjectCategory
 }
 
 const educations: EducationItem[] = [
@@ -25,6 +27,7 @@ const educations: EducationItem[] = [
     highlight: 'Start van mijn eigen radioprogramma op PXL Radio en Radio Mol.',
     imageSrc: pxlMicImage,
     imageAlt: 'Joke met microfoon in PXL-studio',
+    projectCategory: 'PXL',
   },
   {
     period: '2025 - 2026',
@@ -35,9 +38,14 @@ const educations: EducationItem[] = [
     imageSrc: batacCutting,
     imageAlt: 'Joke in de studio van Radio Mol',
     imagePositionClass: 'object-[50%_61%]',
+    projectCategory: 'Thomas More',
   },
-  
+
 ]
+
+function setProjectFilter(category: ProjectCategory) {
+  projectFilter.value = category
+}
 </script>
 
 <template>
@@ -81,6 +89,13 @@ const educations: EducationItem[] = [
               <p class="mt-1.5 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-red-700/85">{{ item.program }}</p>
               <p class="mt-3 text-[clamp(0.9rem,1vw,1rem)] leading-[1.45] text-red-700/90">{{ item.description }}</p>
               <p class="edu-highlight mt-3 text-[clamp(0.9rem,1vw,1rem)] leading-[1.35]">{{ item.highlight }}</p>
+              <a
+                href="#projecten"
+                class="mt-3 inline-flex items-center rounded-full border border-red-700 px-3.5 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4]"
+                @click="setProjectFilter(item.projectCategory)"
+              >
+                Meer info
+              </a>
             </div>
 
             <figure class="overflow-hidden rounded-2xl border border-red-700/20 bg-white p-1.5 shadow-[0_12px_22px_rgba(0,0,0,0.13)] md:min-h-[250px] lg:min-h-[280px]">

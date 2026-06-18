@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import SlideSection from './SlideSection.vue'
+import YoutubePlayer from '../ui/YoutubePlayer.vue'
+import { projectFilter, type ProjectCategory } from '../../state/projectFilter'
 
 import keizersPinguing from '../../assets/pinguing.mp4'
 import deWijers from '../../assets/Hoe is het landschap in De Wijers ontstaan.mp4'
 import lily from '../../assets/lilly.mp4'
 import tsjernobyl from '../../assets/Tsjerno.png'
+import deReconstructieTrailer from '../../assets/batac-de-reconstructie-trailer.mp4'
 
 type ProjectItem = {
   title: string
@@ -14,10 +17,12 @@ type ProjectItem = {
   role: string
   mediaSrc: string
   mediaAlt: string
-  mediaType: 'video' | 'image'
+  mediaType: 'video' | 'image' | 'youtube'
+  youtubeId?: string
+  category: ProjectCategory
   tags: string[]
-  link: string
-  linkLabel: string
+  link?: string
+  linkLabel?: string
 }
 
 const projects: ProjectItem[] = [
@@ -30,6 +35,7 @@ const projects: ProjectItem[] = [
     mediaSrc: keizersPinguing,
     mediaAlt: 'Still uit De Keizerspinguin',
     mediaType: 'video',
+    category: 'PXL',
     tags: ['Documentaire', 'Stemwerk', 'Audio'],
     link: keizersPinguing,
     linkLabel: 'Bekijk fragment',
@@ -43,6 +49,7 @@ const projects: ProjectItem[] = [
     mediaSrc: deWijers,
     mediaAlt: 'Still uit De Wijers',
     mediaType: 'video',
+    category: 'Extern',
     tags: ['Natuur', 'Stage', 'Voice-over'],
     link: deWijers,
     linkLabel: 'Bekijk fragment',
@@ -56,6 +63,7 @@ const projects: ProjectItem[] = [
     mediaSrc: lily,
     mediaAlt: 'Still uit Lily De Libel',
     mediaType: 'video',
+    category: 'Extern',
     tags: ['Kinderen', 'Natuur', 'Stemacteren'],
     link: lily,
     linkLabel: 'Bekijk fragment',
@@ -69,11 +77,49 @@ const projects: ProjectItem[] = [
     mediaSrc: tsjernobyl,
     mediaAlt: 'Still van de talkshow 40 Jaar Tsjernobyl',
     mediaType: 'image',
+    category: 'Thomas More',
     tags: ['Talkshow', 'Studio', 'Presentatie'],
-    link: 'https://www.zoomedia.be/video/40-jaar-tsjernobyl/',
-    linkLabel: 'Bekijk volledige aflevering',
+    youtubeId: '5IJnxNpA8LE',
+  },
+  {
+    title: 'De Reconstructie',
+    kind: 'Studio Misdaadprogramma',
+    summary:
+      'Samen met Martha Amougou en Zihna Van Genechten maakte ik De Reconstructie: een studioprogramma als opdracht voor onze bachelorproef. In dit spelprogramma gaan twee kandidaat-speurders op zoek naar bewijsmaterialen op de plaats delict. Aan de hand van die bewijzen proberen ze samen als duo de reconstructie van de misdaad te vormen.',
+    role: 'Regisseur',
+    mediaSrc: deReconstructieTrailer,
+    mediaAlt: 'Still uit de trailer van De Reconstructie',
+    mediaType: 'video',
+    category: 'Thomas More',
+    tags: ['BATAC', 'Studio', 'Misdaadprogramma'],
+    link: deReconstructieTrailer,
+    linkLabel: 'Bekijk trailer',
+    youtubeId: 'nw-miMTtIoU',
+  },
+  {
+    title: 'EFP - Nieuwsbericht',
+    kind: 'Fictief Nieuwsbericht',
+    summary:
+      'Dit nieuwsbericht maakten we als EFP tijdens een spelshow. Het is dus een fictief verhaal, waarbij we de productie, het scenario en shotlist verzorgden.',
+    role: 'Productie, scenario & shotlist',
+    mediaSrc: '',
+    mediaAlt: 'Still uit het EFP-nieuwsbericht',
+    mediaType: 'youtube',
+    category: 'Thomas More',
+    tags: ['EFP', 'Nieuwsbericht', 'Spelshow'],
+    link: 'https://youtu.be/NlrsdHlkavk',
+    linkLabel: 'Bekijk op YouTube',
+    youtubeId: 'NlrsdHlkavk',
   },
 ]
+
+const filterOptions: ProjectCategory[] = ['Alles', 'PXL', 'Thomas More', 'Extern']
+
+const filteredProjects = computed(() =>
+  projectFilter.value === 'Alles'
+    ? projects
+    : projects.filter((project) => project.category === projectFilter.value)
+)
 
 const activeIndex = ref(0)
 const isPaused = ref(false)
@@ -85,11 +131,32 @@ const activeVideoEl = ref<HTMLVideoElement | null>(null)
 
 let autoplayTimer: ReturnType<typeof setInterval> | null = null
 
-const activeProject = computed(() => projects[activeIndex.value])
+const activeProject = computed(() => filteredProjects.value[activeIndex.value])
+const modalYoutubeId = ref<string | null>(null)
+const isInlineAudible = (mediaType: ProjectItem['mediaType']) => mediaType === 'video' || mediaType === 'youtube'
 
 function syncAudioState() {
-  if (projects[activeIndex.value].mediaType !== 'video') {
+  if (!isInlineAudible(activeProject.value.mediaType)) {
     isUnmuted.value = false
+  }
+}
+
+function openVideoModal(youtubeId: string, title: string) {
+  modalYoutubeId.value = youtubeId
+  isPaused.value = true
+  ;(window as Window & { plausible?: (...args: any[]) => void }).plausible?.('Video Modal Open', {
+    props: { project: title },
+  })
+}
+
+function closeVideoModal() {
+  modalYoutubeId.value = null
+  isPaused.value = false
+}
+
+function onKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape' && modalYoutubeId.value) {
+    closeVideoModal()
   }
 }
 
@@ -101,7 +168,7 @@ function goTo(index: number) {
 }
 
 function nextProject() {
-  activeIndex.value = (activeIndex.value + 1) % projects.length
+  activeIndex.value = (activeIndex.value + 1) % filteredProjects.value.length
   syncAudioState()
 }
 
@@ -112,7 +179,7 @@ function nextProjectManually() {
 }
 
 function prevProject() {
-  activeIndex.value = (activeIndex.value - 1 + projects.length) % projects.length
+  activeIndex.value = (activeIndex.value - 1 + filteredProjects.value.length) % filteredProjects.value.length
   syncAudioState()
 }
 
@@ -154,15 +221,23 @@ function syncVideoAudio() {
 onMounted(() => {
   startAutoplay()
   syncVideoAudio()
+  window.addEventListener('keydown', onKeydown)
 })
 
 onBeforeUnmount(() => {
   stopAutoplay()
+  window.removeEventListener('keydown', onKeydown)
 })
 
 watch([activeIndex, isUnmuted, volume], async () => {
   await nextTick()
   syncVideoAudio()
+})
+
+watch(projectFilter, () => {
+  activeIndex.value = 0
+  syncAudioState()
+  isAutoplayEnabled.value = true
 })
 </script>
 
@@ -200,6 +275,16 @@ watch([activeIndex, isUnmuted, volume], async () => {
                   loop
                   playsinline
                 ></video>
+                <YoutubePlayer
+                  v-else-if="activeProject.mediaType === 'youtube'"
+                  :video-id="activeProject.youtubeId!"
+                  :muted="!isUnmuted"
+                  :volume="volume"
+                  :class="[
+                    'transition duration-300',
+                    !isUnmuted ? 'grayscale brightness-[0.55]' : 'grayscale-0 brightness-100'
+                  ]"
+                />
                 <img
                   v-else
                   :src="activeProject.mediaSrc"
@@ -212,7 +297,7 @@ watch([activeIndex, isUnmuted, volume], async () => {
                   {{ activeProject.kind }}
                 </p>
                 <div
-                  v-if="activeProject.mediaType === 'video' && !isUnmuted"
+                  v-if="isInlineAudible(activeProject.mediaType) && !isUnmuted"
                   class="absolute inset-0 z-20 flex items-center justify-center bg-black/35 p-4"
                 >
                   <button
@@ -226,7 +311,7 @@ watch([activeIndex, isUnmuted, volume], async () => {
                 </div>
 
                 <div
-                  v-if="activeProject.mediaType === 'video' && isUnmuted"
+                  v-if="isInlineAudible(activeProject.mediaType) && isUnmuted"
                   class="group/volume absolute left-3 top-3 z-20 flex items-center gap-2"
                 >
                   <button
@@ -281,6 +366,7 @@ watch([activeIndex, isUnmuted, volume], async () => {
 
                 <div class="flex flex-wrap items-center gap-2 pt-2">
                   <a
+                    v-if="activeProject.link"
                     :href="activeProject.link"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -288,6 +374,14 @@ watch([activeIndex, isUnmuted, volume], async () => {
                   >
                     {{ activeProject.linkLabel }}
                   </a>
+                  <button
+                    v-if="activeProject.youtubeId && activeProject.mediaType !== 'youtube'"
+                    type="button"
+                    class="inline-flex items-center rounded-full border border-red-700 px-3 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4] min-[420px]:px-4 min-[420px]:text-[0.78rem]"
+                    @click="openVideoModal(activeProject.youtubeId, activeProject.title)"
+                  >
+                    Bekijk volledige aflevering
+                  </button>
                   <button
                     type="button"
                     class="inline-flex items-center rounded-full border border-red-700/35 px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-red-700/80 transition hover:border-red-700 min-[420px]:text-[0.75rem]"
@@ -311,8 +405,23 @@ watch([activeIndex, isUnmuted, volume], async () => {
         <aside class="project-list order-1 rounded-3xl border border-red-700/20 bg-[#f9ede4] p-3 shadow-[0_12px_24px_rgba(0,0,0,0.1)] md:p-4">
           <p class="mb-3 text-[0.72rem] font-bold uppercase tracking-[0.13em] text-red-700/70">Projectlijst</p>
 
+          <ul class="mb-3 flex flex-wrap gap-2">
+            <li v-for="option in filterOptions" :key="option">
+              <button
+                type="button"
+                class="rounded-full border px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.08em] transition"
+                :class="projectFilter === option
+                  ? 'border-red-700 bg-red-700 text-[#f9ede4]'
+                  : 'border-red-700/30 bg-white/55 text-red-700/80 hover:border-red-700/60'"
+                @click="projectFilter = option"
+              >
+                {{ option }}
+              </button>
+            </li>
+          </ul>
+
           <ol class="space-y-2">
-            <li v-for="(project, index) in projects" :key="project.title">
+            <li v-for="(project, index) in filteredProjects" :key="project.title">
               <button
                 type="button"
                 class="project-list-item w-full rounded-2xl border px-3 py-2 text-left transition"
@@ -332,6 +441,35 @@ watch([activeIndex, isUnmuted, volume], async () => {
       </div>
     </div>
   </SlideSection>
+
+  <Teleport to="body">
+    <Transition name="modal-fade">
+      <div
+        v-if="modalYoutubeId"
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 md:p-10"
+        @click.self="closeVideoModal"
+      >
+        <div class="relative w-full max-w-4xl">
+          <button
+            type="button"
+            class="absolute -top-10 right-0 text-[0.78rem] font-bold uppercase tracking-[0.1em] text-[#f9ede4] transition hover:text-red-300"
+            @click="closeVideoModal"
+          >
+            Sluiten ✕
+          </button>
+          <div class="aspect-video w-full overflow-hidden rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.5)]">
+            <iframe
+              :src="`https://www.youtube.com/embed/${modalYoutubeId}?autoplay=1&rel=0&modestbranding=1`"
+              class="h-full w-full"
+              title="Volledige aflevering"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -366,4 +504,13 @@ watch([activeIndex, isUnmuted, volume], async () => {
   background: rgba(200, 15, 18, 0.5);
 }
 
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 200ms ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+}
 </style>
