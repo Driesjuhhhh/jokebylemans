@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import SlideSection from './SlideSection.vue'
 import YoutubePlayer from '../ui/YoutubePlayer.vue'
+import ProjectDetailModal, { type ProjectDetail } from '../ui/ProjectDetailModal.vue'
 import { projectFilter, type ProjectCategory } from '../../state/projectFilter'
 
 import keizersPinguing from '../../assets/pinguing.mp4'
@@ -9,6 +10,13 @@ import deWijers from '../../assets/Hoe is het landschap in De Wijers ontstaan.mp
 import lily from '../../assets/lilly.mp4'
 import tsjernobyl from '../../assets/Tsjerno.png'
 import deReconstructieTrailer from '../../assets/batac-de-reconstructie-trailer.mp4'
+import reconstructieRegie from '../../assets/reconstructie-regie.jpg'
+import reconstructieCast from '../../assets/reconstructie-cast.jpg'
+import reconstructieStudio from '../../assets/reconstructie-studio.jpg'
+import reconstructieTeam from '../../assets/reconstructie-team.jpg'
+import reconstructieInterview from '../../assets/reconstructie-interview.jpg'
+import reconstructiePauze from '../../assets/reconstructie-pauze.jpg'
+import reconstructieRegie2 from '../../assets/reconstructie-regie2.jpg'
 
 type ProjectItem = {
   title: string
@@ -23,6 +31,7 @@ type ProjectItem = {
   tags: string[]
   link?: string
   linkLabel?: string
+  detail?: ProjectDetail
 }
 
 const projects: ProjectItem[] = [
@@ -92,9 +101,41 @@ const projects: ProjectItem[] = [
     mediaType: 'video',
     category: 'Thomas More',
     tags: ['BATAC', 'Studio', 'Misdaadprogramma'],
-    link: deReconstructieTrailer,
-    linkLabel: 'Bekijk trailer',
     youtubeId: 'nw-miMTtIoU',
+    detail: {
+      title: 'De Reconstructie',
+      tagline: 'Studio misdaadprogramma · Bachelorproef BATAC',
+      intro:
+        'Een meeslepend misdaadprogramma waarin een duo van kandidaat-speurders de rol van echte rechercheurs op zich neemt. Aan de hand van bewijsmateriaal proberen ze een intrigerende zaak helemaal te ontrafelen.',
+      phases: [
+        {
+          title: 'Plaats delict',
+          description: 'De kandidaten bezoeken de plaats delict en speuren er naar bewijsmateriaal.',
+        },
+        {
+          title: 'Expertise',
+          description: 'Een forensisch expert geeft extra inzichten en duiding bij de verzamelde bewijsstukken.',
+        },
+        {
+          title: 'Reconstructie',
+          description: 'In de finale leggen de kandidaten alle puzzelstukken samen en presenteren ze hun reconstructie van de feiten.',
+        },
+      ],
+      team: ['Joke Bylemans', 'Martha Amougou', 'Zihna Van Genechten'],
+      context:
+        'De Reconstructie is de bachelorproef van Joke, Martha en Zihna binnen de opleiding BATAC (Bachelor na Bachelor in Applied Audiovisual Communication) aan Thomas More Hogeschool in Mechelen, afgerond in 2026. Het programma won de prijs voor beste BATAC Multicamera-programma van dat jaar.',
+      externalUrl: 'https://new.express.adobe.com/webpage/ONtBSCpZd3wUE',
+      externalLinkLabel: 'Bekijk de volledige projectpagina',
+      images: [
+        { src: reconstructieRegie, alt: 'Regie in de controlekamer tijdens De Reconstructie' },
+        { src: reconstructieCast, alt: 'De kandidaten van De Reconstructie op de set' },
+        { src: reconstructieStudio, alt: 'De studio-opstelling van De Reconstructie' },
+        { src: reconstructieTeam, alt: 'Het volledige team achter De Reconstructie' },
+        { src: reconstructieInterview, alt: 'Opname achter de schermen bij De Reconstructie' },
+        { src: reconstructiePauze, alt: 'Een pauzemoment tijdens de opnames van De Reconstructie' },
+        { src: reconstructieRegie2, alt: 'De regie volgt de camerabeelden tijdens De Reconstructie' },
+      ],
+    },
   },
   {
     title: 'EFP - Nieuwsbericht',
@@ -133,6 +174,7 @@ let autoplayTimer: ReturnType<typeof setInterval> | null = null
 
 const activeProject = computed(() => filteredProjects.value[activeIndex.value])
 const modalYoutubeId = ref<string | null>(null)
+const detailProject = ref<ProjectDetail | null>(null)
 const isInlineAudible = (mediaType: ProjectItem['mediaType']) => mediaType === 'video' || mediaType === 'youtube'
 
 function syncAudioState() {
@@ -154,9 +196,25 @@ function closeVideoModal() {
   isPaused.value = false
 }
 
+function openDetailModal(detail: ProjectDetail) {
+  detailProject.value = detail
+  isPaused.value = true
+  ;(window as Window & { plausible?: (...args: any[]) => void }).plausible?.('Project Detail Open', {
+    props: { project: detail.title },
+  })
+}
+
+function closeDetailModal() {
+  detailProject.value = null
+  isPaused.value = false
+}
+
 function onKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape' && modalYoutubeId.value) {
     closeVideoModal()
+  }
+  if (event.key === 'Escape' && detailProject.value) {
+    closeDetailModal()
   }
 }
 
@@ -383,6 +441,14 @@ watch(projectFilter, () => {
                     Bekijk volledige aflevering
                   </button>
                   <button
+                    v-if="activeProject.detail"
+                    type="button"
+                    class="inline-flex items-center rounded-full border border-red-700 px-3 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4] min-[420px]:px-4 min-[420px]:text-[0.78rem]"
+                    @click="openDetailModal(activeProject.detail)"
+                  >
+                    Meer info
+                  </button>
+                  <button
                     type="button"
                     class="inline-flex items-center rounded-full border border-red-700/35 px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-red-700/80 transition hover:border-red-700 min-[420px]:text-[0.75rem]"
                     @click="prevProjectManually"
@@ -468,6 +534,12 @@ watch(projectFilter, () => {
           </div>
         </div>
       </div>
+    </Transition>
+  </Teleport>
+
+  <Teleport to="body">
+    <Transition name="modal-fade">
+      <ProjectDetailModal v-if="detailProject" :detail="detailProject" @close="closeDetailModal" />
     </Transition>
   </Teleport>
 </template>
