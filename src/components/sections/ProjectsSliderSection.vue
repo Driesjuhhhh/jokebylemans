@@ -152,6 +152,21 @@ const projects: ProjectItem[] = [
     linkLabel: 'Bekijk op YouTube',
     youtubeId: 'NlrsdHlkavk',
   },
+  {
+    title: 'Battle of the Beats',
+    kind: 'Studio Muziekquiz',
+    summary:
+      'Bij Battle of the Beats nemen vier kandidaten uit verschillende generaties het tegen elkaar op met hun muzikale kennis. Als onderdeel van mijn opleiding BATAC aan Thomas More nam ik de regie van dit studioprogramma op me.',
+    role: 'Regisseur',
+    mediaSrc: '',
+    mediaAlt: 'Still uit Battle of the Beats',
+    mediaType: 'youtube',
+    category: 'Thomas More',
+    tags: ['BATAC', 'Studio', 'Muziekquiz'],
+    link: 'https://youtu.be/XBqfetEI5As',
+    linkLabel: 'Bekijk op YouTube',
+    youtubeId: 'XBqfetEI5As',
+  },
 ]
 
 const filterOptions: ProjectCategory[] = ['Alles', 'PXL', 'Thomas More', 'Extern']
@@ -194,6 +209,13 @@ function openVideoModal(youtubeId: string, title: string) {
 function closeVideoModal() {
   modalYoutubeId.value = null
   isPaused.value = false
+}
+
+function trackFragmentOpen(project: ProjectItem) {
+  if (project.mediaType !== 'video') return
+  ;(window as Window & { plausible?: (...args: any[]) => void }).plausible?.('Video Fragment Open', {
+    props: { project: project.title },
+  })
 }
 
 function openDetailModal(detail: ProjectDetail) {
@@ -429,6 +451,7 @@ watch(projectFilter, () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     class="inline-flex items-center rounded-full border border-red-700 px-3 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4] min-[420px]:px-4 min-[420px]:text-[0.78rem]"
+                    @click="trackFragmentOpen(activeProject)"
                   >
                     {{ activeProject.linkLabel }}
                   </a>
