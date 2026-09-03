@@ -39,7 +39,7 @@ onBeforeUnmount(() => {
         <span class="hero-main">PORTFOLIO</span>
       </h1>
       <p class="hero-name">JOKE BYLEMANS</p>
-      <p class="hero-tagline">Presentatrice · Voice-over · Radio Mol</p>
+      <p class="hero-tagline">Radiopresentatrice · Voice-over Multicamera · Content Creator</p>
 
       <div class="hero-socials">
         <a

@@ -3,7 +3,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import SlideSection from './SlideSection.vue'
 import YoutubePlayer from '../ui/YoutubePlayer.vue'
 import ProjectDetailModal, { type ProjectDetail } from '../ui/ProjectDetailModal.vue'
-import { projectFilter, type ProjectCategory } from '../../state/projectFilter'
+import { projectFilters, type ProjectCategory } from '../../state/projectFilter'
 
 import keizersPinguing from '../../assets/pinguing.mp4'
 import deWijers from '../../assets/Hoe is het landschap in De Wijers ontstaan.mp4'
@@ -25,9 +25,9 @@ type ProjectItem = {
   role: string
   mediaSrc: string
   mediaAlt: string
-  mediaType: 'video' | 'image' | 'youtube'
+  mediaType: 'video' | 'image' | 'youtube' | 'youtube-short'
   youtubeId?: string
-  category: ProjectCategory
+  categories: ProjectCategory[]
   tags: string[]
   link?: string
   linkLabel?: string
@@ -44,7 +44,7 @@ const projects: ProjectItem[] = [
     mediaSrc: keizersPinguing,
     mediaAlt: 'Still uit De Keizerspinguin',
     mediaType: 'video',
-    category: 'PXL',
+    categories: ['Voice-over'],
     tags: ['Documentaire', 'Stemwerk', 'Audio'],
     link: keizersPinguing,
     linkLabel: 'Bekijk fragment',
@@ -58,7 +58,7 @@ const projects: ProjectItem[] = [
     mediaSrc: deWijers,
     mediaAlt: 'Still uit De Wijers',
     mediaType: 'video',
-    category: 'Extern',
+    categories: ['Voice-over'],
     tags: ['Natuur', 'Stage', 'Voice-over'],
     link: deWijers,
     linkLabel: 'Bekijk fragment',
@@ -72,7 +72,7 @@ const projects: ProjectItem[] = [
     mediaSrc: lily,
     mediaAlt: 'Still uit Lily De Libel',
     mediaType: 'video',
-    category: 'Extern',
+    categories: ['Voice-over'],
     tags: ['Kinderen', 'Natuur', 'Stemacteren'],
     link: lily,
     linkLabel: 'Bekijk fragment',
@@ -86,7 +86,7 @@ const projects: ProjectItem[] = [
     mediaSrc: tsjernobyl,
     mediaAlt: 'Still van de talkshow 40 Jaar Tsjernobyl',
     mediaType: 'image',
-    category: 'Thomas More',
+    categories: ['Presentatie', 'Multicamera'],
     tags: ['Talkshow', 'Studio', 'Presentatie'],
     youtubeId: '5IJnxNpA8LE',
   },
@@ -99,7 +99,7 @@ const projects: ProjectItem[] = [
     mediaSrc: deReconstructieTrailer,
     mediaAlt: 'Still uit de trailer van De Reconstructie',
     mediaType: 'video',
-    category: 'Thomas More',
+    categories: ['Multicamera'],
     tags: ['BATAC', 'Studio', 'Misdaadprogramma'],
     youtubeId: 'nw-miMTtIoU',
     detail: {
@@ -146,7 +146,7 @@ const projects: ProjectItem[] = [
     mediaSrc: '',
     mediaAlt: 'Still uit het EFP-nieuwsbericht',
     mediaType: 'youtube',
-    category: 'Thomas More',
+    categories: ['Presentatie', 'Multicamera'],
     tags: ['EFP', 'Nieuwsbericht', 'Spelshow'],
     link: 'https://youtu.be/NlrsdHlkavk',
     linkLabel: 'Bekijk op YouTube',
@@ -161,21 +161,120 @@ const projects: ProjectItem[] = [
     mediaSrc: '',
     mediaAlt: 'Still uit Battle of the Beats',
     mediaType: 'youtube',
-    category: 'Thomas More',
+    categories: ['Multicamera'],
     tags: ['BATAC', 'Studio', 'Muziekquiz'],
     link: 'https://youtu.be/XBqfetEI5As',
     linkLabel: 'Bekijk op YouTube',
     youtubeId: 'XBqfetEI5As',
   },
+  {
+    title: 'LA Travel Vlog',
+    kind: 'Travelvlog',
+    summary:
+      'Voor deze travelvlog uit Los Angeles stond ik zelf in voor zowel de opnames als de volledige montage.',
+    role: 'Opname & montage',
+    mediaSrc: '',
+    mediaAlt: 'Still uit de LA Travel Vlog',
+    mediaType: 'youtube',
+    categories: ['Content Creation'],
+    tags: ['Travel', 'Opname', 'Montage'],
+    link: 'https://youtu.be/75XDGQ8reys',
+    linkLabel: 'Bekijk op YouTube',
+    youtubeId: '75XDGQ8reys',
+  },
+  {
+    title: 'Porto Travel Vlog',
+    kind: 'Travelvlog',
+    summary:
+      'Voor deze travelvlog uit Porto stond ik zelf in voor zowel de beelden als de volledige montage.',
+    role: 'Opname & montage',
+    mediaSrc: '',
+    mediaAlt: 'Still uit de Porto Travel Vlog',
+    mediaType: 'youtube',
+    categories: ['Content Creation'],
+    tags: ['Travel', 'Opname', 'Montage'],
+    link: 'https://youtu.be/MIVGPq4eXsY',
+    linkLabel: 'Bekijk op YouTube',
+    youtubeId: 'MIVGPq4eXsY',
+  },
+  {
+    title: 'Lissabon Travel Vlog',
+    kind: 'Travelvlog',
+    summary:
+      'Voor deze travelvlog uit Lissabon stond ik zelf in voor zowel de beelden als de volledige montage.',
+    role: 'Opname & montage',
+    mediaSrc: '',
+    mediaAlt: 'Still uit de Lissabon Travel Vlog',
+    mediaType: 'youtube',
+    categories: ['Content Creation'],
+    tags: ['Travel', 'Opname', 'Montage'],
+    link: 'https://youtu.be/1WKM004EfDM',
+    linkLabel: 'Bekijk op YouTube',
+    youtubeId: '1WKM004EfDM',
+  },
+  {
+    title: 'Wandelroute in de kijker: Kasteel Meylandt',
+    kind: 'Socialmediavideo',
+    summary:
+      'Tijdens mijn stage kreeg ik de opdracht om verschillende wandelroutes in De Wijers in de kijker te zetten. Voor deze video over Kasteel Meylandt verzorgde ik zelf de opnames, de volledige montage en de publicatie op sociale media.',
+    role: 'Opname, montage & social media',
+    mediaSrc: '',
+    mediaAlt: 'Still uit de video over de wandelroute bij Kasteel Meylandt',
+    mediaType: 'youtube-short',
+    categories: ['Content Creation'],
+    tags: ['De Wijers', 'Stage', 'Social Media'],
+    link: 'https://youtube.com/shorts/u-kUjV-_Gvo?feature=share',
+    linkLabel: 'Bekijk op YouTube',
+    youtubeId: 'u-kUjV-_Gvo',
+  },
+  {
+    title: 'Wandelroute in de kijker: Kelchterhoef',
+    kind: 'Socialmediavideo',
+    summary:
+      'Tijdens mijn stage zette ik ook de wandelroute in Kelchterhoef in de kijker. Ik verzorgde zelf de opnames, de volledige montage en de publicatie op sociale media.',
+    role: 'Opname, montage & social media',
+    mediaSrc: '',
+    mediaAlt: 'Still uit de video over de wandelroute in Kelchterhoef',
+    mediaType: 'youtube-short',
+    categories: ['Content Creation'],
+    tags: ['De Wijers', 'Stage', 'Social Media'],
+    link: 'https://youtube.com/shorts/94oh3a0RAQE',
+    linkLabel: 'Bekijk op YouTube',
+    youtubeId: '94oh3a0RAQE',
+  },
+  {
+    title: 'Wandelroute in de kijker',
+    kind: 'Socialmediavideo',
+    summary:
+      'Ook voor deze stagevideo zette ik een wandelroute in De Wijers in de kijker. Ik verzorgde zelf de opnames, de volledige montage en de publicatie op sociale media.',
+    role: 'Opname, montage & social media',
+    mediaSrc: '',
+    mediaAlt: 'Still uit een video over een wandelroute in De Wijers',
+    mediaType: 'youtube-short',
+    categories: ['Content Creation'],
+    tags: ['De Wijers', 'Stage', 'Social Media'],
+    link: 'https://youtube.com/shorts/Zt3qLUpgYpI',
+    linkLabel: 'Bekijk op YouTube',
+    youtubeId: 'Zt3qLUpgYpI',
+  },
 ]
 
-const filterOptions: ProjectCategory[] = ['Alles', 'PXL', 'Thomas More', 'Extern']
+const filterOptions: ProjectCategory[] = [
+  'Presentatie',
+  'Voice-over',
+  'Multicamera',
+  'Content Creation',
+]
 
-const filteredProjects = computed(() =>
-  projectFilter.value === 'Alles'
+const filteredProjects = computed(() => {
+  const activeFilters = projectFilters.value
+
+  return activeFilters.length === 0
     ? projects
-    : projects.filter((project) => project.category === projectFilter.value)
-)
+    : projects.filter((project) =>
+        project.categories.some((category) => activeFilters.includes(category))
+      )
+})
 
 const activeIndex = ref(0)
 const isPaused = ref(false)
@@ -190,7 +289,8 @@ let autoplayTimer: ReturnType<typeof setInterval> | null = null
 const activeProject = computed(() => filteredProjects.value[activeIndex.value])
 const modalYoutubeId = ref<string | null>(null)
 const detailProject = ref<ProjectDetail | null>(null)
-const isInlineAudible = (mediaType: ProjectItem['mediaType']) => mediaType === 'video' || mediaType === 'youtube'
+const isInlineAudible = (mediaType: ProjectItem['mediaType']) =>
+  mediaType === 'video' || mediaType === 'youtube' || mediaType === 'youtube-short'
 
 function syncAudioState() {
   if (!isInlineAudible(activeProject.value.mediaType)) {
@@ -314,11 +414,15 @@ watch([activeIndex, isUnmuted, volume], async () => {
   syncVideoAudio()
 })
 
-watch(projectFilter, () => {
-  activeIndex.value = 0
-  syncAudioState()
-  isAutoplayEnabled.value = true
-})
+watch(
+  projectFilters,
+  () => {
+    activeIndex.value = 0
+    syncAudioState()
+    isAutoplayEnabled.value = true
+  },
+  { deep: true }
+)
 </script>
 
 <template>
@@ -340,8 +444,20 @@ watch(projectFilter, () => {
           @mouseleave="isPaused = false"
         >
           <Transition name="project-fade" mode="out-in">
-            <article :key="activeProject.title">
-              <div class="relative h-[220px] overflow-hidden min-[420px]:h-[250px] sm:h-[310px] md:h-[360px]">
+            <article
+              :key="activeProject.title"
+              :class="activeProject.mediaType === 'youtube-short'
+                ? 'md:grid md:grid-cols-[minmax(260px,0.75fr)_minmax(0,1.25fr)]'
+                : ''"
+            >
+              <div
+                :class="[
+                  'relative overflow-hidden',
+                  activeProject.mediaType === 'youtube-short'
+                    ? 'mx-auto h-[520px] w-full max-w-[293px] min-[420px]:h-[600px] min-[420px]:max-w-[338px] md:mx-0 md:h-full md:min-h-[560px] md:max-w-none'
+                    : 'h-[220px] min-[420px]:h-[250px] sm:h-[310px] md:h-[360px]'
+                ]"
+              >
                 <video
                   v-if="activeProject.mediaType === 'video'"
                   ref="activeVideoEl"
@@ -356,7 +472,7 @@ watch(projectFilter, () => {
                   playsinline
                 ></video>
                 <YoutubePlayer
-                  v-else-if="activeProject.mediaType === 'youtube'"
+                  v-else-if="activeProject.mediaType === 'youtube' || activeProject.mediaType === 'youtube-short'"
                   :video-id="activeProject.youtubeId!"
                   :muted="!isUnmuted"
                   :volume="volume"
@@ -421,7 +537,12 @@ watch(projectFilter, () => {
                 </div>
               </div>
 
-              <div class="space-y-3 p-4 min-[420px]:p-5 md:p-6">
+              <div
+                :class="[
+                  'space-y-3 p-4 min-[420px]:p-5 md:p-6',
+                  activeProject.mediaType === 'youtube-short' ? 'md:flex md:flex-col md:justify-center' : ''
+                ]"
+              >
                 <h3 class="font-display text-[clamp(1.55rem,4vw,3rem)] leading-[0.92] uppercase">
                   {{ activeProject.title }}
                 </h3>
@@ -456,7 +577,7 @@ watch(projectFilter, () => {
                     {{ activeProject.linkLabel }}
                   </a>
                   <button
-                    v-if="activeProject.youtubeId && activeProject.mediaType !== 'youtube'"
+                    v-if="activeProject.youtubeId && activeProject.mediaType !== 'youtube' && activeProject.mediaType !== 'youtube-short'"
                     type="button"
                     class="inline-flex items-center rounded-full border border-red-700 px-3 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4] min-[420px]:px-4 min-[420px]:text-[0.78rem]"
                     @click="openVideoModal(activeProject.youtubeId, activeProject.title)"
@@ -494,18 +615,17 @@ watch(projectFilter, () => {
         <aside class="project-list order-1 rounded-3xl border border-red-700/20 bg-[#f9ede4] p-3 shadow-[0_12px_24px_rgba(0,0,0,0.1)] md:p-4">
           <p class="mb-3 text-[0.72rem] font-bold uppercase tracking-[0.13em] text-red-700/70">Projectlijst</p>
 
-          <ul class="mb-3 flex flex-wrap gap-2">
-            <li v-for="option in filterOptions" :key="option">
-              <button
-                type="button"
-                class="rounded-full border px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.08em] transition"
-                :class="projectFilter === option
+          <ul class="mb-3 flex flex-nowrap gap-1 overflow-x-auto">
+            <li v-for="option in filterOptions" :key="option" class="shrink-0">
+              <label
+                class="inline-flex cursor-pointer items-center whitespace-nowrap rounded-full border px-2 py-1 text-[0.58rem] font-bold uppercase tracking-[0.04em] transition min-[1200px]:px-2.5 min-[1200px]:text-[0.62rem]"
+                :class="projectFilters.includes(option)
                   ? 'border-red-700 bg-red-700 text-[#f9ede4]'
                   : 'border-red-700/30 bg-white/55 text-red-700/80 hover:border-red-700/60'"
-                @click="projectFilter = option"
               >
+                <input v-model="projectFilters" class="sr-only" type="checkbox" :value="option" />
                 {{ option }}
-              </button>
+              </label>
             </li>
           </ul>
 

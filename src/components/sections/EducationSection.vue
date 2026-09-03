@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SlideSection from './SlideSection.vue'
-import { projectFilter, type ProjectCategory } from '../../state/projectFilter'
+import { projectFilters, type ProjectCategory } from '../../state/projectFilter'
 
 import batacCutting from '../../assets/batac-cutting.jpeg'
 import pxlMicImage from '../../assets/rm-mic.jpeg'
@@ -27,7 +27,7 @@ const educations: EducationItem[] = [
     highlight: 'Start van mijn eigen radioprogramma op PXL Radio en Radio Mol.',
     imageSrc: pxlMicImage,
     imageAlt: 'Joke met microfoon in PXL-studio',
-    projectCategory: 'PXL',
+    projectCategory: 'Presentatie',
   },
   {
     period: '2025 - 2026',
@@ -38,13 +38,13 @@ const educations: EducationItem[] = [
     imageSrc: batacCutting,
     imageAlt: 'Joke in de studio van Radio Mol',
     imagePositionClass: 'object-[50%_61%]',
-    projectCategory: 'Thomas More',
+    projectCategory: 'Multicamera',
   },
 
 ]
 
 function setProjectFilter(category: ProjectCategory) {
-  projectFilter.value = category
+  projectFilters.value = [category]
 }
 </script>
 
