@@ -276,6 +276,21 @@ const filteredProjects = computed(() => {
       )
 })
 
+const projectsPerPage = 8
+const currentListPage = ref(0)
+const totalListPages = computed(() => Math.ceil(filteredProjects.value.length / projectsPerPage))
+const paginatedProjects = computed(() => {
+  const startIndex = currentListPage.value * projectsPerPage
+
+  return filteredProjects.value
+    .slice(startIndex, startIndex + projectsPerPage)
+    .map((project, index) => ({ project, projectIndex: startIndex + index }))
+})
+
+function toggleProjectFilter(category: ProjectCategory) {
+  projectFilters.value = projectFilters.value.includes(category) ? [] : [category]
+}
+
 const activeIndex = ref(0)
 const isPaused = ref(false)
 const isUnmuted = ref(false)
@@ -347,6 +362,11 @@ function goTo(index: number) {
   stopAutoplay()
 }
 
+function goToListPage(page: number) {
+  currentListPage.value = page
+  goTo(page * projectsPerPage)
+}
+
 function nextProject() {
   activeIndex.value = (activeIndex.value + 1) % filteredProjects.value.length
   syncAudioState()
@@ -414,10 +434,15 @@ watch([activeIndex, isUnmuted, volume], async () => {
   syncVideoAudio()
 })
 
+watch(activeIndex, (index) => {
+  currentListPage.value = Math.floor(index / projectsPerPage)
+})
+
 watch(
   projectFilters,
   () => {
     activeIndex.value = 0
+    currentListPage.value = 0
     syncAudioState()
     isAutoplayEnabled.value = true
   },
@@ -439,7 +464,7 @@ watch(
 
       <div class="grid gap-4 lg:grid-cols-[1fr_1.9fr] lg:gap-6">
         <div
-          class="featured-card order-2 overflow-hidden rounded-3xl border border-red-700/25 bg-[#f7e8dc] shadow-[0_18px_35px_rgba(0,0,0,0.13)]"
+          class="featured-card order-2 overflow-hidden rounded-3xl border border-red-700/25 bg-[#f7e8dc] shadow-[0_18px_35px_rgba(0,0,0,0.13)] lg:h-[680px]"
           @mouseenter="isPaused = true"
           @mouseleave="isPaused = false"
         >
@@ -447,8 +472,8 @@ watch(
             <article
               :key="activeProject.title"
               :class="activeProject.mediaType === 'youtube-short'
-                ? 'md:grid md:grid-cols-[minmax(260px,0.75fr)_minmax(0,1.25fr)]'
-                : ''"
+                ? 'md:grid md:grid-cols-[minmax(260px,0.75fr)_minmax(0,1.25fr)] lg:h-full'
+                : 'lg:flex lg:h-full lg:flex-col'"
             >
               <div
                 :class="[
@@ -540,7 +565,9 @@ watch(
               <div
                 :class="[
                   'space-y-3 p-4 min-[420px]:p-5 md:p-6',
-                  activeProject.mediaType === 'youtube-short' ? 'md:flex md:flex-col md:justify-center' : ''
+                  activeProject.mediaType === 'youtube-short'
+                    ? 'md:flex md:flex-col md:justify-center lg:min-h-0 lg:overflow-y-auto'
+                    : 'lg:min-h-0 lg:flex-1 lg:overflow-y-auto'
                 ]"
               >
                 <h3 class="font-display text-[clamp(1.55rem,4vw,3rem)] leading-[0.92] uppercase">
@@ -612,7 +639,7 @@ watch(
           </Transition>
         </div>
 
-        <aside class="project-list order-1 rounded-3xl border border-red-700/20 bg-[#f9ede4] p-3 shadow-[0_12px_24px_rgba(0,0,0,0.1)] md:p-4">
+        <aside class="project-list order-1 rounded-3xl border border-red-700/20 bg-[#f9ede4] p-3 shadow-[0_12px_24px_rgba(0,0,0,0.1)] md:p-4 lg:flex lg:h-[680px] lg:flex-col lg:overflow-hidden">
           <p class="mb-3 text-[0.72rem] font-bold uppercase tracking-[0.13em] text-red-700/70">Projectlijst</p>
 
           <ul class="mb-3 flex flex-nowrap gap-1 overflow-x-auto">
@@ -623,29 +650,76 @@ watch(
                   ? 'border-red-700 bg-red-700 text-[#f9ede4]'
                   : 'border-red-700/30 bg-white/55 text-red-700/80 hover:border-red-700/60'"
               >
-                <input v-model="projectFilters" class="sr-only" type="checkbox" :value="option" />
+                <input
+                  class="sr-only"
+                  type="checkbox"
+                  :checked="projectFilters.includes(option)"
+                  :value="option"
+                  @change="toggleProjectFilter(option)"
+                />
                 {{ option }}
               </label>
             </li>
           </ul>
 
-          <ol class="space-y-2">
-            <li v-for="(project, index) in filteredProjects" :key="project.title">
+          <ol class="space-y-2 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
+            <li v-for="{ project, projectIndex } in paginatedProjects" :key="project.title">
               <button
                 type="button"
                 class="project-list-item w-full rounded-2xl border px-3 py-2 text-left transition"
-                :class="index === activeIndex
+                :class="projectIndex === activeIndex
                   ? 'border-red-700 bg-[#f4ddd0] shadow-[0_8px_18px_rgba(0,0,0,0.09)]'
                   : 'border-red-700/15 bg-white/55 hover:border-red-700/40'"
-                @click="goTo(index)"
+                @click="goTo(projectIndex)"
               >
-                <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-red-700/65">0{{ index + 1 }} · {{ project.kind }}</p>
+                <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-red-700/65">{{ String(projectIndex + 1).padStart(2, '0') }} · {{ project.kind }}</p>
                 <p class="mt-1 font-display text-[clamp(1rem,1.7vw,1.3rem)] leading-[0.95] uppercase text-red-700">
                   {{ project.title }}
                 </p>
               </button>
             </li>
           </ol>
+
+          <nav
+            v-if="totalListPages > 1"
+            class="mt-3 flex items-center justify-between gap-2 border-t border-red-700/15 pt-3"
+            aria-label="Projectpagina's"
+          >
+            <button
+              type="button"
+              class="rounded-full border border-red-700/30 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.06em] text-red-700 transition disabled:cursor-not-allowed disabled:opacity-35"
+              :disabled="currentListPage === 0"
+              @click="goToListPage(currentListPage - 1)"
+            >
+              Vorige
+            </button>
+
+            <div class="flex items-center gap-1" aria-label="Pagina kiezen">
+              <button
+                v-for="page in totalListPages"
+                :key="page"
+                type="button"
+                class="flex h-7 w-7 items-center justify-center rounded-full border text-[0.68rem] font-bold transition"
+                :class="currentListPage === page - 1
+                  ? 'border-red-700 bg-red-700 text-[#f9ede4]'
+                  : 'border-red-700/25 bg-white/55 text-red-700 hover:border-red-700/60'"
+                :aria-label="`Ga naar projectpagina ${page}`"
+                :aria-current="currentListPage === page - 1 ? 'page' : undefined"
+                @click="goToListPage(page - 1)"
+              >
+                {{ page }}
+              </button>
+            </div>
+
+            <button
+              type="button"
+              class="rounded-full border border-red-700/30 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.06em] text-red-700 transition disabled:cursor-not-allowed disabled:opacity-35"
+              :disabled="currentListPage === totalListPages - 1"
+              @click="goToListPage(currentListPage + 1)"
+            >
+              Volgende
+            </button>
+          </nav>
         </aside>
       </div>
     </div>

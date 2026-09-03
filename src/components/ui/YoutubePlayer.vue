@@ -44,6 +44,15 @@ function syncPlayerState() {
   }
 }
 
+function disableCaptions() {
+  player?.unloadModule?.('captions')
+}
+
+function onPlayerReady() {
+  syncPlayerState()
+  disableCaptions()
+}
+
 onMounted(async () => {
   const YT = await loadYouTubeApi()
   if (isDestroyed) return
@@ -54,6 +63,7 @@ onMounted(async () => {
       autoplay: 1,
       mute: 1,
       controls: 0,
+      cc_load_policy: 0,
       modestbranding: 1,
       rel: 0,
       playsinline: 1,
@@ -61,7 +71,9 @@ onMounted(async () => {
       playlist: props.videoId,
     },
     events: {
-      onReady: syncPlayerState,
+      onReady: onPlayerReady,
+      onStateChange: disableCaptions,
+      onApiChange: disableCaptions,
     },
   })
 })
