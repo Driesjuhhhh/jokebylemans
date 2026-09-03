@@ -17,6 +17,12 @@ defineProps<{
       'animate-float'
     ]"
   >
-    <img :src="src" :alt="alt" :class="['h-full w-full object-cover', imageClass]" />
+    <img
+      :src="src"
+      :alt="alt"
+      loading="lazy"
+      decoding="async"
+      :class="['h-full w-full object-cover', imageClass]"
+    />
   </figure>
 </template>

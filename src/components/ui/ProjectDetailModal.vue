@@ -85,6 +85,8 @@ function prevImage() {
             <img
               :src="detail.images[activeImageIndex].src"
               :alt="detail.images[activeImageIndex].alt"
+              loading="lazy"
+              decoding="async"
               class="h-56 w-full object-cover sm:h-80"
             />
             <template v-if="detail.images.length > 1">

@@ -2,8 +2,8 @@
 import SlideSection from './SlideSection.vue'
 import { projectFilters, type ProjectCategory } from '../../state/projectFilter'
 
-import batacCutting from '../../assets/batac-cutting.jpeg'
-import pxlMicImage from '../../assets/rm-mic.jpeg'
+import batacCutting from '../../assets/batac-cutting.webp'
+import pxlMicImage from '../../assets/rm-mic.webp'
 
 type EducationItem = {
   period: string
@@ -102,6 +102,8 @@ function setProjectFilter(category: ProjectCategory) {
               <img
                 :src="item.imageSrc"
                 :alt="item.imageAlt"
+                loading="lazy"
+                decoding="async"
                 :class="[
                   'h-[180px] w-full rounded-xl object-cover md:h-[250px] lg:h-[280px]',
                   item.imagePositionClass ?? ''

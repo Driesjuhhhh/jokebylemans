@@ -182,7 +182,7 @@ onBeforeUnmount(() => {
     </div>
   </main>
   <footer class="relative z-10 border-t border-red-700/20 bg-[#f7ebe2] px-5 pt-4 pb-[calc(1.1rem+env(safe-area-inset-bottom))] text-center text-xs text-red-700 md:px-8 md:py-4 md:text-sm">
-    &copy; {{ currentYear }}. Developed by <a
+    &copy; {{ currentYear }}. <a href="/projecten/" class="font-semibold">Alle projecten</a>. Developed by <a
       href="https://driesbielen.be"
       target="_blank"
       rel="noopener noreferrer"

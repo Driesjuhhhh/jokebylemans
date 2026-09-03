@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Baloo+2:wght@700&family=Bebas+Neue&family=Chewy&family=Poppins:wght@400;500;600;700&display=swap');
+@import '@fontsource/anton/latin-400.css';
+@import '@fontsource/chewy/latin-400.css';
+@import '@fontsource/poppins/latin-400.css';
+@import '@fontsource/poppins/latin-500.css';
+@import '@fontsource/poppins/latin-600.css';
+@import '@fontsource/poppins/latin-700.css';
 @import 'tailwindcss';
 
 @theme {
@@ -6,7 +11,7 @@
   --color-portfolio-bg: #f1dfd2;
 
   --font-display: 'Anton', sans-serif;
-  --font-signature: 'Chewy', 'Bebas Neue', sans-serif;
+  --font-signature: 'Chewy', sans-serif;
   --font-body: 'Poppins', sans-serif;
 }
 

@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
 import SlideSection from './SlideSection.vue'
 
-const disableAosOnMobile = ref(false)
 const cvHref = 'https://canva.link/8p8itjkd9re6m8m'
 
 function trackCvClick() {
@@ -13,33 +11,21 @@ function trackSocialClick(eventName: string) {
   ;(window as Window & { plausible?: (...args: any[]) => void }).plausible?.(eventName)
 }
 
-function updateAosMode() {
-  disableAosOnMobile.value = window.innerWidth < 1024
-}
-
-onMounted(() => {
-  updateAosMode()
-  window.addEventListener('resize', updateAosMode)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', updateAosMode)
-})
 </script>
 
 <template>
   <SlideSection
     id="hero"
-    :aos="disableAosOnMobile ? false : undefined"
+    :aos="false"
     section-class="snap-start relative mt-15 overflow-hidden flex items-center justify-center text-center !max-w-none !px-0"
   >
     <div class="hero-content">
-      <h1 class="hero-word" aria-label="Portfolio">
+      <p class="hero-word" aria-hidden="true">
         <span class="hero-shadow" aria-hidden="true">PORTFOLIO</span>
         <span class="hero-main">PORTFOLIO</span>
-      </h1>
-      <p class="hero-name">JOKE BYLEMANS</p>
-      <p class="hero-tagline">Radiopresentatrice · Voice-over Multicamera · Content Creator</p>
+      </p>
+      <h1 class="hero-name">JOKE BYLEMANS</h1>
+      <p class="hero-tagline">Presentatrice · Voice-over · Multicamera · Content Creator</p>
 
       <div class="hero-socials">
         <a

@@ -6,4 +6,4 @@ export type ProjectCategory =
   | 'Multicamera'
   | 'Content Creation'
 
-export const projectFilters = ref<ProjectCategory[]>([])
+export const projectFilters = ref<ProjectCategory[]>(['Presentatie'])

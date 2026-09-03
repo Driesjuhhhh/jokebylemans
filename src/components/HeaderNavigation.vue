@@ -22,7 +22,7 @@ const links = [
         <li v-for="link in links" :key="link.href">
           <a
             :href="link.href"
-            class="nav-link block whitespace-nowrap text-[0.72rem] font-semibold uppercase tracking-[0.09em] text-red-700/90 transition md:rounded-sm md:px-3 md:py-1.5 md:text-sm"
+            class="nav-link inline-flex min-h-7 items-center whitespace-nowrap py-1 text-[0.72rem] font-semibold uppercase tracking-[0.09em] text-red-700/90 transition md:rounded-sm md:px-3 md:py-1.5 md:text-sm"
           >
             {{ link.label }}
           </a>

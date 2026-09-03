@@ -3,11 +3,11 @@ import { computed, ref } from 'vue'
 import SlideSection from './SlideSection.vue'
 import PolaroidPhoto from '../ui/PolaroidPhoto.vue'
 
-import jokeImg from '../../assets/Joke.jpg'
-import rmMicImg from '../../assets/rm-mic.jpeg'
-import rmLotteAnneImg from '../../assets/rm-lotte-anne.jpeg'
-import rmAverageRobImg from '../../assets/rm-average-rob.jpeg'
-import rmKerstImg from '../../assets/rm-kerst.JPG'
+import jokeImg from '../../assets/Joke.webp'
+import rmMicImg from '../../assets/rm-mic.webp'
+import rmLotteAnneImg from '../../assets/rm-lotte-anne.webp'
+import rmAverageRobImg from '../../assets/rm-average-rob.webp'
+import rmKerstImg from '../../assets/rm-kerst.webp'
 
 type PhotoItem = {
   src: string

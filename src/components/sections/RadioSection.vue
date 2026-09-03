@@ -3,10 +3,10 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import SlideSection from './SlideSection.vue'
 import PolaroidPhoto from '../ui/PolaroidPhoto.vue'
 
-import radioImage from '../../assets/rm-mic.jpeg'
-import rmAverageRobImage from '../../assets/rm-average-rob.jpeg'
-import rmKerstSilkeImage from '../../assets/rm-kerst-silke.jpeg'
-import rmLotteAnneImage from '../../assets/rm-lotte-anne.jpeg'
+import radioImage from '../../assets/rm-mic.webp'
+import rmAverageRobImage from '../../assets/rm-average-rob.webp'
+import rmKerstSilkeImage from '../../assets/rm-kerst-silke.webp'
+import rmLotteAnneImage from '../../assets/rm-lotte-anne.webp'
 
 const emit = defineEmits<{
   (event: 'listen-now'): void
@@ -133,6 +133,8 @@ onBeforeUnmount(() => {
             <img
               :src="radioImage"
               alt="Joke presenteert in de radiostudio"
+              loading="lazy"
+              decoding="async"
               class="h-full w-full rounded-xl object-cover"
             />
           </div>
@@ -179,6 +181,8 @@ onBeforeUnmount(() => {
             <img
               :src="image.src"
               :alt="image.alt"
+              loading="lazy"
+              decoding="async"
               class="gallery-image w-full transition-transform duration-300 group-hover:-translate-y-1"
             />
           </figure>

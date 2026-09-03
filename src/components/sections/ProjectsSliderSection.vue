@@ -5,18 +5,18 @@ import YoutubePlayer from '../ui/YoutubePlayer.vue'
 import ProjectDetailModal, { type ProjectDetail } from '../ui/ProjectDetailModal.vue'
 import { projectFilters, type ProjectCategory } from '../../state/projectFilter'
 
-import keizersPinguing from '../../assets/pinguing.mp4'
+import keizersPinguing from '../../assets/pinguing-optimized.mp4'
 import deWijers from '../../assets/Hoe is het landschap in De Wijers ontstaan.mp4'
 import lily from '../../assets/lilly.mp4'
-import tsjernobyl from '../../assets/Tsjerno.png'
-import deReconstructieTrailer from '../../assets/batac-de-reconstructie-trailer.mp4'
-import reconstructieRegie from '../../assets/reconstructie-regie.jpg'
-import reconstructieCast from '../../assets/reconstructie-cast.jpg'
-import reconstructieStudio from '../../assets/reconstructie-studio.jpg'
-import reconstructieTeam from '../../assets/reconstructie-team.jpg'
-import reconstructieInterview from '../../assets/reconstructie-interview.jpg'
-import reconstructiePauze from '../../assets/reconstructie-pauze.jpg'
-import reconstructieRegie2 from '../../assets/reconstructie-regie2.jpg'
+import tsjernobyl from '../../assets/Tsjerno.webp'
+import deReconstructieTrailer from '../../assets/batac-de-reconstructie-trailer-optimized.mp4'
+import reconstructieRegie from '../../assets/reconstructie-regie.webp'
+import reconstructieCast from '../../assets/reconstructie-cast.webp'
+import reconstructieStudio from '../../assets/reconstructie-studio.webp'
+import reconstructieTeam from '../../assets/reconstructie-team.webp'
+import reconstructieInterview from '../../assets/reconstructie-interview.webp'
+import reconstructiePauze from '../../assets/reconstructie-pauze.webp'
+import reconstructieRegie2 from '../../assets/reconstructie-regie2.webp'
 
 type ProjectItem = {
   title: string
@@ -298,8 +298,11 @@ const isAutoplayEnabled = ref(true)
 const volume = ref(0.85)
 const autoplayMs = 6000
 const activeVideoEl = ref<HTMLVideoElement | null>(null)
+const featuredCardEl = ref<HTMLElement | null>(null)
+const isProjectMediaVisible = ref(false)
 
 let autoplayTimer: ReturnType<typeof setInterval> | null = null
+let projectMediaObserver: IntersectionObserver | null = null
 
 const activeProject = computed(() => filteredProjects.value[activeIndex.value])
 const modalYoutubeId = ref<string | null>(null)
@@ -422,11 +425,28 @@ onMounted(() => {
   startAutoplay()
   syncVideoAudio()
   window.addEventListener('keydown', onKeydown)
+
+  projectMediaObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (entry?.isIntersecting) {
+        isProjectMediaVisible.value = true
+        projectMediaObserver?.disconnect()
+        projectMediaObserver = null
+      }
+    },
+    { rootMargin: '300px 0px' }
+  )
+
+  if (featuredCardEl.value) {
+    projectMediaObserver.observe(featuredCardEl.value)
+  }
 })
 
 onBeforeUnmount(() => {
   stopAutoplay()
   window.removeEventListener('keydown', onKeydown)
+  projectMediaObserver?.disconnect()
+  projectMediaObserver = null
 })
 
 watch([activeIndex, isUnmuted, volume], async () => {
@@ -464,6 +484,7 @@ watch(
 
       <div class="grid gap-4 lg:grid-cols-[1fr_1.9fr] lg:gap-6">
         <div
+          ref="featuredCardEl"
           class="featured-card order-2 overflow-hidden rounded-3xl border border-red-700/25 bg-[#f7e8dc] shadow-[0_18px_35px_rgba(0,0,0,0.13)] lg:h-[680px]"
           @mouseenter="isPaused = true"
           @mouseleave="isPaused = false"
@@ -484,7 +505,7 @@ watch(
                 ]"
               >
                 <video
-                  v-if="activeProject.mediaType === 'video'"
+                  v-if="isProjectMediaVisible && activeProject.mediaType === 'video'"
                   ref="activeVideoEl"
                   :src="activeProject.mediaSrc"
                   :class="[
@@ -492,12 +513,13 @@ watch(
                     !isUnmuted ? 'grayscale brightness-[0.55]' : 'grayscale-0 brightness-100'
                   ]"
                   autoplay
+                  preload="metadata"
                   :muted="!isUnmuted"
                   loop
                   playsinline
                 ></video>
                 <YoutubePlayer
-                  v-else-if="activeProject.mediaType === 'youtube' || activeProject.mediaType === 'youtube-short'"
+                  v-else-if="isProjectMediaVisible && (activeProject.mediaType === 'youtube' || activeProject.mediaType === 'youtube-short')"
                   :video-id="activeProject.youtubeId!"
                   :muted="!isUnmuted"
                   :volume="volume"
@@ -507,11 +529,18 @@ watch(
                   ]"
                 />
                 <img
-                  v-else
+                  v-else-if="isProjectMediaVisible"
                   :src="activeProject.mediaSrc"
                   :alt="activeProject.mediaAlt"
+                  loading="lazy"
+                  decoding="async"
                   class="h-full w-full object-cover"
                 />
+                <div v-else class="flex h-full w-full items-center justify-center bg-[#ead4c5] px-6 text-center">
+                  <p class="text-[0.72rem] font-bold uppercase tracking-[0.12em] text-red-700/65">
+                    Media wordt geladen zodra de projecten in beeld komen
+                  </p>
+                </div>
 
                 <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-black/0"></div>
                 <p class="absolute bottom-3 left-3 rounded-full bg-[#f9ede4]/95 px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.11em] text-red-700">
@@ -742,7 +771,7 @@ watch(
           </button>
           <div class="aspect-video w-full overflow-hidden rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.5)]">
             <iframe
-              :src="`https://www.youtube.com/embed/${modalYoutubeId}?autoplay=1&rel=0&modestbranding=1`"
+              :src="`https://www.youtube.com/embed/${modalYoutubeId}?autoplay=1&rel=0&modestbranding=1&cc_load_policy=0`"
               class="h-full w-full"
               title="Volledige aflevering"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

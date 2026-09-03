@@ -5,12 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "generate:seo": "node scripts/generate-seo-pages.mjs",
+    "build": "npm run generate:seo && vue-tsc -b && vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@fontsource/anton": "^5.3.0",
+    "@fontsource/chewy": "^5.3.0",
+    "@fontsource/poppins": "^5.3.0",
     "aos": "^2.3.4",
     "pinia": "^3.0.4",
     "vue": "^3.5.32"
