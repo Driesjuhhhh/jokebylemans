@@ -17,6 +17,15 @@ import reconstructieTeam from '../../assets/reconstructie-team.webp'
 import reconstructieInterview from '../../assets/reconstructie-interview.webp'
 import reconstructiePauze from '../../assets/reconstructie-pauze.webp'
 import reconstructieRegie2 from '../../assets/reconstructie-regie2.webp'
+import pukkelpopLivecamera from '../../assets/pukkelpop-livecamera.webp'
+import pukkelpopStage from '../../assets/pukkelpop-stage.webp'
+import pukkelpopRegie from '../../assets/pukkelpop-regie.webp'
+import pukkelpopSfeer from '../../assets/pukkelpop-sfeer.webp'
+
+type ProjectImage = {
+  src: string
+  alt: string
+}
 
 type ProjectItem = {
   title: string
@@ -25,7 +34,8 @@ type ProjectItem = {
   role: string
   mediaSrc: string
   mediaAlt: string
-  mediaType: 'video' | 'image' | 'youtube' | 'youtube-short'
+  mediaType: 'video' | 'image' | 'gallery' | 'youtube' | 'youtube-short'
+  gallery?: ProjectImage[]
   youtubeId?: string
   categories: ProjectCategory[]
   tags: string[]
@@ -168,6 +178,24 @@ const projects: ProjectItem[] = [
     youtubeId: 'XBqfetEI5As',
   },
   {
+    title: 'Pukkelpop',
+    kind: 'Festival Livestream',
+    summary:
+      'Op Pukkelpop 2026 werkte ik op vrijwillige basis als cameraoperator. Zo was mijn beeld af en toe te zien in de multicameralivestream die via VRT MAX werd uitgezonden. Bovendien mocht ik in de Boiler Room werken met een gimbal en een handycam, en bediende ik er een aantal PTZ-camera’s.',
+    role: 'Livecameraoperator',
+    mediaSrc: pukkelpopLivecamera,
+    mediaAlt: 'Joke met een livecamera achter de schermen op Pukkelpop',
+    mediaType: 'gallery',
+    gallery: [
+      { src: pukkelpopLivecamera, alt: 'Joke met een livecamera achter de schermen op Pukkelpop' },
+      { src: pukkelpopStage, alt: 'Livecamera aan het podium van Pukkelpop tijdens Captain Comedy All Stars' },
+      { src: pukkelpopRegie, alt: 'Multicameraregie van de livestream op Pukkelpop' },
+      { src: pukkelpopSfeer, alt: 'Joke en een collega bij de Pukkelpop-fotowand' },
+    ],
+    categories: ['Multicamera'],
+    tags: ['Pukkelpop', 'VRT MAX', 'Livestream'],
+  },
+  {
     title: 'LA Travel Vlog',
     kind: 'Travelvlog',
     summary:
@@ -305,6 +333,13 @@ let autoplayTimer: ReturnType<typeof setInterval> | null = null
 let projectMediaObserver: IntersectionObserver | null = null
 
 const activeProject = computed(() => filteredProjects.value[activeIndex.value])
+const activeGalleryIndex = ref(0)
+const activeGalleryImage = computed(() =>
+  activeProject.value.gallery?.[activeGalleryIndex.value] ?? {
+    src: activeProject.value.mediaSrc,
+    alt: activeProject.value.mediaAlt,
+  }
+)
 const modalYoutubeId = ref<string | null>(null)
 const detailProject = ref<ProjectDetail | null>(null)
 const isInlineAudible = (mediaType: ProjectItem['mediaType']) =>
@@ -392,6 +427,22 @@ function prevProjectManually() {
   stopAutoplay()
 }
 
+function goToGalleryImage(index: number) {
+  activeGalleryIndex.value = index
+  isAutoplayEnabled.value = false
+  stopAutoplay()
+}
+
+function nextGalleryImage() {
+  const total = activeProject.value.gallery?.length ?? 0
+  if (total) goToGalleryImage((activeGalleryIndex.value + 1) % total)
+}
+
+function prevGalleryImage() {
+  const total = activeProject.value.gallery?.length ?? 0
+  if (total) goToGalleryImage((activeGalleryIndex.value - 1 + total) % total)
+}
+
 function startAutoplay() {
   if (autoplayTimer) return
 
@@ -455,6 +506,7 @@ watch([activeIndex, isUnmuted, volume], async () => {
 })
 
 watch(activeIndex, (index) => {
+  activeGalleryIndex.value = 0
   currentListPage.value = Math.floor(index / projectsPerPage)
 })
 
@@ -492,14 +544,14 @@ watch(
           <Transition name="project-fade" mode="out-in">
             <article
               :key="activeProject.title"
-              :class="activeProject.mediaType === 'youtube-short'
+              :class="activeProject.mediaType === 'youtube-short' || activeProject.mediaType === 'gallery'
                 ? 'md:grid md:grid-cols-[minmax(260px,0.75fr)_minmax(0,1.25fr)] lg:h-full'
                 : 'lg:flex lg:h-full lg:flex-col'"
             >
               <div
                 :class="[
                   'relative overflow-hidden',
-                  activeProject.mediaType === 'youtube-short'
+                  activeProject.mediaType === 'youtube-short' || activeProject.mediaType === 'gallery'
                     ? 'mx-auto h-[520px] w-full max-w-[293px] min-[420px]:h-[600px] min-[420px]:max-w-[338px] md:mx-0 md:h-full md:min-h-[560px] md:max-w-none'
                     : 'h-[220px] min-[420px]:h-[250px] sm:h-[310px] md:h-[360px]'
                 ]"
@@ -528,6 +580,16 @@ watch(
                     !isUnmuted ? 'grayscale brightness-[0.55]' : 'grayscale-0 brightness-100'
                   ]"
                 />
+                <Transition v-else-if="isProjectMediaVisible && activeProject.mediaType === 'gallery'" name="photo-fade" mode="out-in">
+                  <img
+                    :key="activeGalleryImage.src"
+                    :src="activeGalleryImage.src"
+                    :alt="activeGalleryImage.alt"
+                    loading="lazy"
+                    decoding="async"
+                    class="h-full w-full object-cover"
+                  />
+                </Transition>
                 <img
                   v-else-if="isProjectMediaVisible"
                   :src="activeProject.mediaSrc"
@@ -543,6 +605,39 @@ watch(
                 </div>
 
                 <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-black/0"></div>
+                <template v-if="activeProject.mediaType === 'gallery' && activeProject.gallery && activeProject.gallery.length > 1">
+                  <button
+                    type="button"
+                    class="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#f9ede4]/60 bg-black/45 text-2xl text-[#f9ede4] transition hover:bg-black/65 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f9ede4]"
+                    aria-label="Vorige foto"
+                    @click.stop="prevGalleryImage"
+                  >
+                    &#8249;
+                  </button>
+                  <button
+                    type="button"
+                    class="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#f9ede4]/60 bg-black/45 text-2xl text-[#f9ede4] transition hover:bg-black/65 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f9ede4]"
+                    aria-label="Volgende foto"
+                    @click.stop="nextGalleryImage"
+                  >
+                    &#8250;
+                  </button>
+                  <div class="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1.5" aria-label="Foto kiezen">
+                    <button
+                      v-for="(_, index) in activeProject.gallery"
+                      :key="index"
+                      type="button"
+                      class="h-2 rounded-full bg-[#f9ede4] transition-all"
+                      :class="index === activeGalleryIndex ? 'w-6 opacity-100' : 'w-2 opacity-55 hover:opacity-85'"
+                      :aria-label="`Ga naar foto ${index + 1}`"
+                      :aria-current="index === activeGalleryIndex ? 'true' : undefined"
+                      @click.stop="goToGalleryImage(index)"
+                    ></button>
+                  </div>
+                  <p class="absolute right-3 top-3 z-20 rounded-full bg-black/50 px-2.5 py-1 text-[0.68rem] font-semibold text-[#f9ede4]">
+                    {{ activeGalleryIndex + 1 }} / {{ activeProject.gallery.length }}
+                  </p>
+                </template>
                 <p class="absolute bottom-3 left-3 rounded-full bg-[#f9ede4]/95 px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.11em] text-red-700">
                   {{ activeProject.kind }}
                 </p>
@@ -594,7 +689,7 @@ watch(
               <div
                 :class="[
                   'space-y-3 p-4 min-[420px]:p-5 md:p-6',
-                  activeProject.mediaType === 'youtube-short'
+                  activeProject.mediaType === 'youtube-short' || activeProject.mediaType === 'gallery'
                     ? 'md:flex md:flex-col md:justify-center lg:min-h-0 lg:overflow-y-auto'
                     : 'lg:min-h-0 lg:flex-1 lg:overflow-y-auto'
                 ]"
@@ -800,6 +895,16 @@ watch(
 .project-fade-leave-to {
   opacity: 0;
   transform: translateY(10px);
+}
+
+.photo-fade-enter-active,
+.photo-fade-leave-active {
+  transition: opacity 180ms ease;
+}
+
+.photo-fade-enter-from,
+.photo-fade-leave-to {
+  opacity: 0;
 }
 
 .project-list-item {

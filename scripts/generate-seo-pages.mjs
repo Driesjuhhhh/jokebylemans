@@ -63,6 +63,13 @@ const projects = [
     uploadDate: '2026-06-24T11:32:15-07:00',
   },
   {
+    slug: 'pukkelpop',
+    title: 'Pukkelpop',
+    category: 'Multicamera',
+    role: 'Livecameraoperator',
+    description: 'Op Pukkelpop 2026 werkte Joke Bylemans als cameraoperator mee aan de multicameralivestream op VRT MAX, met een gimbal, handycam en PTZ-camera’s.',
+  },
+  {
     slug: 'la-travel-vlog',
     title: 'LA Travel Vlog',
     category: 'Content creation',
