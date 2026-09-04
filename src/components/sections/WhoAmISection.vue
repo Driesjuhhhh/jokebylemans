@@ -64,8 +64,11 @@ const showNextPhoto = () => {
           automatisch een knop omslaat in mijn hoofd. Ik sta aan en ga ervoor.
         </p>
         <p class="max-w-[40ch] text-left md:text-justify text-[clamp(0.95rem,1.45vw,1.45rem)] leading-[1.45]">
-          Van jongs af aan ben ik bezig met mijn stem. Ik volgde dictie, deed toneel en leerde luider spreken,
-          omdat ik vroeger heel stil was. Ondertussen is mijn stem gebruiken iets waar ik me volledig in thuis voel.
+          Die drive neem ik mee in alles wat ik doe. De voorbije jaren ben ik bewust op zoek gegaan naar
+          verschillende kanten van de mediawereld. Ik ontdekte dat voice-overs inspreken me enorm passioneert, dat
+          meewerken aan een multicameraproductie me een adrenalinekick geeft en dat content creation me blijft
+          fascineren. Zo groeide ik stap voor stap naar een veelzijdig profiel waarin ik mijn creativiteit,
+          enthousiasme en liefde voor media op verschillende manieren kwijt kan.
         </p>
       </div>
 
