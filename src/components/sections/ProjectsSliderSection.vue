@@ -21,6 +21,8 @@ import pukkelpopLivecamera from '../../assets/pukkelpop-livecamera.webp'
 import pukkelpopStage from '../../assets/pukkelpop-stage.webp'
 import pukkelpopRegie from '../../assets/pukkelpop-regie.webp'
 import pukkelpopSfeer from '../../assets/pukkelpop-sfeer.webp'
+import horstRegie from '../../assets/horst-regie.webp'
+import horstCamera from '../../assets/horst-camera.webp'
 
 type ProjectImage = {
   src: string
@@ -194,6 +196,22 @@ const projects: ProjectItem[] = [
     ],
     categories: ['Multicamera'],
     tags: ['Pukkelpop', 'VRT MAX', 'Livestream'],
+  },
+  {
+    title: 'Stage bij Slash9 Productions',
+    kind: 'Multicamera Livestream',
+    summary:
+      'Tijdens mijn stage bij Slash9 Productions werkte ik mee aan de multicameracaptatie voor de livestream van Horst Festival.',
+    role: 'Stagiair multicamera',
+    mediaSrc: horstRegie,
+    mediaAlt: 'Aan de regietafel voor de livestream van Horst Festival',
+    mediaType: 'gallery',
+    gallery: [
+      { src: horstRegie, alt: 'Aan de regietafel voor de livestream van Horst Festival' },
+      { src: horstCamera, alt: 'Cameraopname tijdens Horst Festival' },
+    ],
+    categories: ['Multicamera'],
+    tags: ['Slash9 Productions', 'Horst Festival', 'Stage', 'Livestream'],
   },
   {
     title: 'LA Travel Vlog',
