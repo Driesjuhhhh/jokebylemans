@@ -5,9 +5,11 @@ import PolaroidPhoto from '../ui/PolaroidPhoto.vue'
 
 import jokeImg from '../../assets/Joke.webp'
 import rmMicImg from '../../assets/rm-mic.webp'
-import rmLotteAnneImg from '../../assets/rm-lotte-anne.webp'
-import rmAverageRobImg from '../../assets/rm-average-rob.webp'
 import rmKerstImg from '../../assets/rm-kerst.webp'
+import jokeAanZeeImg from '../../assets/joke-aan-zee.webp'
+import jokeHavenImg from '../../assets/joke-aan-de-haven.webp'
+import jokeHeadsetImg from '../../assets/joke-met-headset.webp'
+import jokeStadiumImg from '../../assets/joke-dodger-stadium.webp'
 
 type PhotoItem = {
   src: string
@@ -17,9 +19,11 @@ type PhotoItem = {
 const photos: PhotoItem[] = [
   { src: jokeImg, alt: 'Joke achter de mengtafel' },
   { src: rmMicImg, alt: 'Joke aan de microfoon' },
-  { src: rmLotteAnneImg, alt: 'Joke in de studio met collega’s' },
-  { src: rmAverageRobImg, alt: 'Joke tijdens een radiosegment' },
-  { src: rmKerstImg, alt: 'Joke in kerstsfeer in de radiostudio' }
+  { src: rmKerstImg, alt: 'Joke in kerstsfeer in de radiostudio' },
+  { src: jokeAanZeeImg, alt: 'Joke fotografeert de zee vanuit een rotsopening' },
+  { src: jokeHavenImg, alt: 'Joke maakt een foto aan de haven' },
+  { src: jokeHeadsetImg, alt: 'Joke met een headset en microfoon' },
+  { src: jokeStadiumImg, alt: 'Joke op het veld van Dodger Stadium' }
 ]
 
 const frontIndex = ref(0)

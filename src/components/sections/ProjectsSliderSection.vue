@@ -585,6 +585,7 @@ watch(
                     :key="activeGalleryImage.src"
                     :src="activeGalleryImage.src"
                     :alt="activeGalleryImage.alt"
+                    :style="activeGalleryImage.src === pukkelpopStage ? { objectPosition: 'calc(50% + 55px) center' } : undefined"
                     loading="lazy"
                     decoding="async"
                     class="h-full w-full object-cover"
