@@ -37,6 +37,9 @@ type ProjectItem = {
   mediaSrc: string
   mediaAlt: string
   mediaType: 'video' | 'image' | 'gallery' | 'youtube' | 'youtube-short'
+  previewLink?: string
+  portrait?: boolean
+  poster?: string
   gallery?: ProjectImage[]
   youtubeId?: string
   categories: ProjectCategory[]
@@ -212,6 +215,51 @@ const projects: ProjectItem[] = [
     ],
     categories: ['Multicamera'],
     tags: ['Slash9 Productions', 'Horst Festival', 'Stage', 'Livestream'],
+  },
+  {
+    title: "Blog: Sound of Silence",
+    kind: "Blog",
+    summary: "Deze blog schreef ik tijdens mijn opleiding Communicatie. Ik heb hier met plezier aan gewerkt.",
+    role: "Auteur",
+    mediaSrc: `${import.meta.env.BASE_URL}media/blog-joke-bylemans.jpg`,
+    mediaAlt: "Eerste pagina van de blog: Hoe creëer jij de ideale Sound of Silence?",
+    mediaType: "image",
+    tags: ["Blog", "Communicatie"],
+    link: `${import.meta.env.BASE_URL}media/blog-joke-bylemans.pdf`,
+    linkLabel: "Lees de blog (PDF)",
+    previewLink: `${import.meta.env.BASE_URL}media/blog-joke-bylemans.pdf`,
+    categories: ['Content Creation'],
+    portrait: true,
+  },
+  {
+    title: "BookTok",
+    kind: "BookTok",
+    summary: "Ik kreeg de kans om een booktok te filmen. In deze video kon ik volledig mijn creativiteit kwijt. De manier waarop je een verhaal visueel kunt brengen, is hierbij superfijn!",
+    role: "Content creator",
+    mediaSrc: `${import.meta.env.BASE_URL}media/joke-bylemans-booktok.mp4`,
+    mediaAlt: "BookTok van Joke Bylemans",
+    mediaType: "video",
+    tags: ["BookTok", "Video", "Creativiteit"],
+    link: `${import.meta.env.BASE_URL}media/joke-bylemans-booktok.mp4`,
+    linkLabel: "Bekijk de video",
+    categories: ['Content Creation'],
+    portrait: true,
+    poster: `${import.meta.env.BASE_URL}media/joke-bylemans-booktok.jpg`,
+  },
+  {
+    title: "Video Joke Bylemans",
+    kind: "Persoonlijke video",
+    summary: "Deze video legt mijn passie voor radio, mijn hobby, uit. Wie is Joke achter de micro? Dat ontdek je hier!",
+    role: "Content creator",
+    mediaSrc: `${import.meta.env.BASE_URL}media/video-joke-bylemans.mp4`,
+    mediaAlt: "Joke Bylemans vertelt over haar passie voor radio",
+    mediaType: "video",
+    tags: ["Radio", "Video"],
+    link: `${import.meta.env.BASE_URL}media/video-joke-bylemans.mp4`,
+    linkLabel: "Bekijk de video",
+    categories: ['Content Creation'],
+    portrait: true,
+    poster: `${import.meta.env.BASE_URL}media/video-joke-bylemans.jpg`,
   },
   {
     title: 'LA Travel Vlog',
@@ -397,6 +445,13 @@ function openDetailModal(detail: ProjectDetail) {
   })
 }
 
+function openReconstructie() {
+  const detail = projects.find((project) => project.title === 'De Reconstructie')?.detail
+  if (detail) openDetailModal(detail)
+}
+
+defineExpose({ openReconstructie })
+
 function closeDetailModal() {
   detailProject.value = null
   isPaused.value = false
@@ -562,14 +617,14 @@ watch(
           <Transition name="project-fade" mode="out-in">
             <article
               :key="activeProject.title"
-              :class="activeProject.mediaType === 'youtube-short' || activeProject.mediaType === 'gallery'
+              :class="activeProject.portrait || activeProject.mediaType === 'youtube-short' || activeProject.mediaType === 'gallery'
                 ? 'md:grid md:grid-cols-[minmax(260px,0.75fr)_minmax(0,1.25fr)] lg:h-full'
                 : 'lg:flex lg:h-full lg:flex-col'"
             >
               <div
                 :class="[
                   'relative overflow-hidden',
-                  activeProject.mediaType === 'youtube-short' || activeProject.mediaType === 'gallery'
+                  activeProject.portrait || activeProject.mediaType === 'youtube-short' || activeProject.mediaType === 'gallery'
                     ? 'mx-auto h-[520px] w-full max-w-[293px] min-[420px]:h-[600px] min-[420px]:max-w-[338px] md:mx-0 md:h-full md:min-h-[560px] md:max-w-none'
                     : 'h-[220px] min-[420px]:h-[250px] sm:h-[310px] md:h-[360px]'
                 ]"
@@ -578,8 +633,11 @@ watch(
                   v-if="isProjectMediaVisible && activeProject.mediaType === 'video'"
                   ref="activeVideoEl"
                   :src="activeProject.mediaSrc"
+                  :poster="activeProject.poster"
+                  :aria-label="activeProject.mediaAlt"
                   :class="[
-                    'h-full w-full object-cover transition duration-300',
+                    'h-full w-full transition duration-300',
+                    activeProject.portrait ? 'object-contain bg-black' : 'object-cover',
                     !isUnmuted ? 'grayscale brightness-[0.55]' : 'grayscale-0 brightness-100'
                   ]"
                   autoplay
@@ -615,7 +673,8 @@ watch(
                   :alt="activeProject.mediaAlt"
                   loading="lazy"
                   decoding="async"
-                  class="h-full w-full object-cover"
+                  class="h-full w-full"
+                  :class="activeProject.portrait ? 'object-contain' : 'object-cover'"
                 />
                 <div v-else class="flex h-full w-full items-center justify-center bg-[#ead4c5] px-6 text-center">
                   <p class="text-[0.72rem] font-bold uppercase tracking-[0.12em] text-red-700/65">
@@ -624,6 +683,18 @@ watch(
                 </div>
 
                 <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-black/0"></div>
+                <a
+                  v-if="isProjectMediaVisible && activeProject.previewLink"
+                  :href="activeProject.previewLink"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="group absolute inset-0 z-20 flex cursor-zoom-in items-end justify-center p-4 pb-14 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-red-700"
+                  aria-label="Open de blog op groot formaat (PDF, nieuw tabblad)"
+                >
+                  <span class="rounded-full bg-[#f9ede4]/95 px-4 py-2 text-[0.72rem] font-bold uppercase tracking-[0.08em] text-red-700 shadow-lg transition group-hover:bg-red-700 group-hover:text-[#f9ede4] group-focus-visible:bg-red-700 group-focus-visible:text-[#f9ede4]">
+                    Klik om te vergroten ↗
+                  </span>
+                </a>
                 <template v-if="activeProject.mediaType === 'gallery' && activeProject.gallery && activeProject.gallery.length > 1">
                   <button
                     type="button"
@@ -708,7 +779,7 @@ watch(
               <div
                 :class="[
                   'space-y-3 p-4 min-[420px]:p-5 md:p-6',
-                  activeProject.mediaType === 'youtube-short' || activeProject.mediaType === 'gallery'
+                  activeProject.portrait || activeProject.mediaType === 'youtube-short' || activeProject.mediaType === 'gallery'
                     ? 'md:flex md:flex-col md:justify-center lg:min-h-0 lg:overflow-y-auto'
                     : 'lg:min-h-0 lg:flex-1 lg:overflow-y-auto'
                 ]"

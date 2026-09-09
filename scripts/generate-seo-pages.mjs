@@ -5,6 +5,9 @@ const outputDir = new URL('../public/projecten/', import.meta.url)
 const lastModified = new Date().toISOString().slice(0, 10)
 
 const projects = [
+  {"slug": "blog-sound-of-silence", "title": "Blog: Sound of Silence", "category": "Content creation", "role": "Auteur", "description": "Deze blog schreef ik tijdens mijn opleiding Communicatie. Ik heb hier met plezier aan gewerkt.", "mediaUrl": "/media/blog-joke-bylemans.pdf", "mediaType": "pdf", "image": "/media/blog-joke-bylemans.jpg"},
+  {"slug": "booktok", "title": "BookTok", "category": "Content creation", "role": "Content creator", "description": "Ik kreeg de kans om een booktok te filmen. In deze video kon ik volledig mijn creativiteit kwijt. De manier waarop je een verhaal visueel kunt brengen, is hierbij superfijn!", "mediaUrl": "/media/joke-bylemans-booktok.mp4", "mediaType": "video", "image": "/media/joke-bylemans-booktok.jpg"},
+  {"slug": "video-joke-bylemans", "title": "Video Joke Bylemans", "category": "Content creation", "role": "Content creator", "description": "Deze video legt mijn passie voor radio, mijn hobby, uit. Wie is Joke achter de micro? Dat ontdek je hier!", "mediaUrl": "/media/video-joke-bylemans.mp4", "mediaType": "video", "image": "/media/video-joke-bylemans.jpg"},
   {
     slug: 'de-keizerspinguin',
     title: 'De Keizerspinguin',
@@ -148,8 +151,12 @@ await mkdir(outputDir, { recursive: true })
 
 for (const project of projects) {
   const canonical = `${siteUrl}/projecten/${project.slug}/`
-  const image = project.youtubeId ? `https://i.ytimg.com/vi/${project.youtubeId}/hqdefault.jpg` : `${siteUrl}/og-joke-bylemans.jpg`
-  const videoMarkup = project.youtubeId
+  const image = project.image ? `${siteUrl}${project.image}` : project.youtubeId ? `https://i.ytimg.com/vi/${project.youtubeId}/hqdefault.jpg` : `${siteUrl}/og-joke-bylemans.jpg`
+  const videoMarkup = project.mediaType === 'pdf'
+    ? `<p><a href="${project.mediaUrl}" target="_blank" rel="noopener noreferrer">Lees de blog (PDF)</a></p><a href="${project.mediaUrl}" target="_blank" rel="noopener noreferrer"><img src="${project.image}" alt="Eerste pagina van de blog" style="display:block;max-width:100%;max-height:700px" /></a>`
+    : project.mediaType === 'video'
+    ? `<video controls playsinline preload="metadata" poster="${project.image}" src="${project.mediaUrl}" aria-label="${escapeHtml(project.title)}" style="display:block;width:100%;max-height:75vh;background:#111;border-radius:20px"></video>`
+    : project.youtubeId
     ? `<div class="video"><iframe src="https://www.youtube.com/embed/${project.youtubeId}?rel=0&cc_load_policy=0" title="${escapeHtml(project.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`
     : `<p><a href="${siteUrl}/#projecten">Bekijk en beluister dit project in het portfolio.</a></p>`
   const videoJsonLd = project.youtubeId

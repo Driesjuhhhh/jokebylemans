@@ -61,17 +61,17 @@ function prevImage() {
     @wheel.stop
   >
     <div
-      class="relative flex h-full w-full max-w-3xl flex-col overflow-y-auto overscroll-contain rounded-none bg-[#f9ede4] shadow-[0_25px_60px_rgba(0,0,0,0.5)] md:h-auto md:max-h-[88vh] md:rounded-3xl"
+      class="relative flex h-full w-full max-w-3xl flex-col overflow-hidden rounded-none bg-[#f9ede4] shadow-[0_25px_60px_rgba(0,0,0,0.5)] md:h-auto md:max-h-[88vh] md:rounded-3xl"
     >
       <button
         type="button"
-        class="sticky top-3 z-10 ml-auto mr-3 rounded-full border border-red-700/40 bg-[#f9ede4]/90 px-3 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4]"
+        class="z-10 mb-3 ml-auto mr-3 mt-3 shrink-0 rounded-full border border-red-700/40 bg-[#f9ede4]/90 px-3 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4]"
         @click="$emit('close')"
       >
         Sluiten ✕
       </button>
 
-      <div class="space-y-6 px-5 pb-8 pt-0 md:px-9">
+      <div class="detail-scroll min-h-0 overflow-y-auto overscroll-contain space-y-6 px-5 pb-8 pt-0 md:mb-5 md:mr-2 md:px-9" tabindex="0" aria-label="Projectinformatie">
         <header class="space-y-2">
           <p class="text-[0.74rem] font-bold uppercase tracking-[0.13em] text-red-700/70">{{ detail.tagline }}</p>
           <h3 class="font-display text-[clamp(1.9rem,5vw,3.2rem)] leading-[0.92] uppercase">{{ detail.title }}</h3>
@@ -173,3 +173,29 @@ function prevImage() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.detail-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #c80f1280 transparent;
+  scrollbar-gutter: stable;
+}
+
+.detail-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.detail-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.detail-scroll::-webkit-scrollbar-thumb {
+  border: 2px solid #f9ede4;
+  border-radius: 999px;
+  background: #c80f1280;
+}
+
+.detail-scroll::-webkit-scrollbar-thumb:hover {
+  background: #c80f12;
+}
+</style>

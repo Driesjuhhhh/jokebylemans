@@ -21,6 +21,7 @@ let isAutoScrolling = false
 let releaseAutoScrollTimer: ReturnType<typeof setTimeout> | null = null
 let resetWheelAccumulatorTimer: ReturnType<typeof setTimeout> | null = null
 
+const projectsSection = ref<InstanceType<typeof ProjectsSliderSection> | null>(null)
 const forceShowRadioPlayer = ref(false)
 const currentYear = new Date().getFullYear()
 
@@ -175,8 +176,8 @@ onBeforeUnmount(() => {
     <div class="relative z-10">
       <HeroSection />
       <WhoAmISection />
-      <EducationSection />
-      <ProjectsSliderSection />
+      <EducationSection @open-reconstructie="projectsSection?.openReconstructie()" />
+      <ProjectsSliderSection ref="projectsSection" />
       <RadioSection @listen-now="onListenNow" />
       <ContactSection />
     </div>
