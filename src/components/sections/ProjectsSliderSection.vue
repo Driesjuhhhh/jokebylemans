@@ -101,7 +101,7 @@ const projects: ProjectItem[] = [
     mediaSrc: tsjernobyl,
     mediaAlt: 'Still van de talkshow 40 Jaar Tsjernobyl',
     mediaType: 'image',
-    categories: ['Presentatie', 'Multicamera'],
+    categories: ['Presentatie'],
     tags: ['Talkshow', 'Studio', 'Presentatie'],
     youtubeId: '5IJnxNpA8LE',
   },
@@ -161,7 +161,7 @@ const projects: ProjectItem[] = [
     mediaSrc: '',
     mediaAlt: 'Still uit het EFP-nieuwsbericht',
     mediaType: 'youtube',
-    categories: ['Presentatie', 'Multicamera'],
+    categories: ['Presentatie'],
     tags: ['EFP', 'Nieuwsbericht', 'Spelshow'],
     link: 'https://youtu.be/NlrsdHlkavk',
     linkLabel: 'Bekijk op YouTube',
@@ -373,6 +373,12 @@ const filteredProjects = computed(() => {
 const projectsPerPage = 8
 const currentListPage = ref(0)
 const totalListPages = computed(() => Math.ceil(filteredProjects.value.length / projectsPerPage))
+const visibleProjectRange = computed(() => {
+  const first = currentListPage.value * projectsPerPage + 1
+  const last = Math.min(first + projectsPerPage - 1, filteredProjects.value.length)
+
+  return `${first}–${last} van ${filteredProjects.value.length}`
+})
 const paginatedProjects = computed(() => {
   const startIndex = currentListPage.value * projectsPerPage
 
@@ -382,7 +388,9 @@ const paginatedProjects = computed(() => {
 })
 
 function toggleProjectFilter(category: ProjectCategory) {
-  projectFilters.value = projectFilters.value.includes(category) ? [] : [category]
+  projectFilters.value = projectFilters.value.includes(category)
+    ? projectFilters.value.filter((activeCategory) => activeCategory !== category)
+    : [...projectFilters.value, category]
 }
 
 const activeIndex = ref(0)
@@ -856,25 +864,25 @@ watch(
         <aside class="project-list order-1 rounded-3xl border border-red-700/20 bg-[#f9ede4] p-3 shadow-[0_12px_24px_rgba(0,0,0,0.1)] md:p-4 lg:flex lg:h-[680px] lg:flex-col lg:overflow-hidden">
           <p class="mb-3 text-[0.72rem] font-bold uppercase tracking-[0.13em] text-red-700/70">Projectlijst</p>
 
-          <ul class="mb-3 flex flex-nowrap gap-1 overflow-x-auto">
-            <li v-for="option in filterOptions" :key="option" class="shrink-0">
-              <label
-                class="inline-flex cursor-pointer items-center whitespace-nowrap rounded-full border px-2 py-1 text-[0.58rem] font-bold uppercase tracking-[0.04em] transition min-[1200px]:px-2.5 min-[1200px]:text-[0.62rem]"
-                :class="projectFilters.includes(option)
-                  ? 'border-red-700 bg-red-700 text-[#f9ede4]'
-                  : 'border-red-700/30 bg-white/55 text-red-700/80 hover:border-red-700/60'"
-              >
-                <input
-                  class="sr-only"
-                  type="checkbox"
-                  :checked="projectFilters.includes(option)"
-                  :value="option"
-                  @change="toggleProjectFilter(option)"
-                />
-                {{ option }}
-              </label>
-            </li>
-          </ul>
+          <div
+            class="mb-3 flex flex-nowrap gap-1 overflow-x-auto pb-1"
+            role="group"
+            aria-label="Filter projecten op categorie"
+          >
+            <button
+              v-for="option in filterOptions"
+              :key="option"
+              type="button"
+              class="inline-flex shrink-0 cursor-pointer items-center whitespace-nowrap rounded-full border px-2 py-1 text-[0.58rem] font-bold uppercase tracking-[0.04em] transition min-[1200px]:px-2.5 min-[1200px]:text-[0.62rem]"
+              :class="projectFilters.includes(option)
+                ? 'border-red-700 bg-red-700 text-[#f9ede4]'
+                : 'border-red-700/30 bg-white/55 text-red-700/80 hover:border-red-700/60'"
+              :aria-pressed="projectFilters.includes(option)"
+              @click="toggleProjectFilter(option)"
+            >
+              {{ option }}
+            </button>
+          </div>
 
           <ol class="space-y-2 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
             <li v-for="{ project, projectIndex } in paginatedProjects" :key="project.title">
@@ -896,43 +904,48 @@ watch(
 
           <nav
             v-if="totalListPages > 1"
-            class="mt-3 flex items-center justify-between gap-2 border-t border-red-700/15 pt-3"
+            class="mt-3 border-t border-red-700/15 pt-3"
             aria-label="Projectpagina's"
           >
-            <button
-              type="button"
-              class="rounded-full border border-red-700/30 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.06em] text-red-700 transition disabled:cursor-not-allowed disabled:opacity-35"
-              :disabled="currentListPage === 0"
-              @click="goToListPage(currentListPage - 1)"
-            >
-              Vorige
-            </button>
-
-            <div class="flex items-center gap-1" aria-label="Pagina kiezen">
+            <p class="mb-2 text-center text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-red-700/65">
+              {{ visibleProjectRange }} projecten
+            </p>
+            <div class="flex items-center justify-between gap-2">
               <button
-                v-for="page in totalListPages"
-                :key="page"
                 type="button"
-                class="flex h-7 w-7 items-center justify-center rounded-full border text-[0.68rem] font-bold transition"
-                :class="currentListPage === page - 1
-                  ? 'border-red-700 bg-red-700 text-[#f9ede4]'
-                  : 'border-red-700/25 bg-white/55 text-red-700 hover:border-red-700/60'"
-                :aria-label="`Ga naar projectpagina ${page}`"
-                :aria-current="currentListPage === page - 1 ? 'page' : undefined"
-                @click="goToListPage(page - 1)"
+                class="rounded-full border border-red-700/30 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.06em] text-red-700 transition disabled:cursor-not-allowed disabled:opacity-35"
+                :disabled="currentListPage === 0"
+                @click="goToListPage(currentListPage - 1)"
               >
-                {{ page }}
+                Vorige
+              </button>
+
+              <div class="flex items-center gap-1" aria-label="Pagina kiezen">
+                <button
+                  v-for="page in totalListPages"
+                  :key="page"
+                  type="button"
+                  class="flex h-7 w-7 items-center justify-center rounded-full border text-[0.68rem] font-bold transition"
+                  :class="currentListPage === page - 1
+                    ? 'border-red-700 bg-red-700 text-[#f9ede4]'
+                    : 'border-red-700/25 bg-white/55 text-red-700 hover:border-red-700/60'"
+                  :aria-label="`Ga naar projectpagina ${page}`"
+                  :aria-current="currentListPage === page - 1 ? 'page' : undefined"
+                  @click="goToListPage(page - 1)"
+                >
+                  {{ page }}
+                </button>
+              </div>
+
+              <button
+                type="button"
+                class="rounded-full border border-red-700/30 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.06em] text-red-700 transition disabled:cursor-not-allowed disabled:opacity-35"
+                :disabled="currentListPage === totalListPages - 1"
+                @click="goToListPage(currentListPage + 1)"
+              >
+                Volgende
               </button>
             </div>
-
-            <button
-              type="button"
-              class="rounded-full border border-red-700/30 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.06em] text-red-700 transition disabled:cursor-not-allowed disabled:opacity-35"
-              :disabled="currentListPage === totalListPages - 1"
-              @click="goToListPage(currentListPage + 1)"
-            >
-              Volgende
-            </button>
           </nav>
         </aside>
       </div>

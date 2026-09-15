@@ -6,4 +6,5 @@ export type ProjectCategory =
   | 'Multicamera'
   | 'Content Creation'
 
-export const projectFilters = ref<ProjectCategory[]>(['Presentatie'])
+// Geen actieve categorie betekent dat standaard alle projecten zichtbaar zijn.
+export const projectFilters = ref<ProjectCategory[]>([])
