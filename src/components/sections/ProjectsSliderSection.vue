@@ -262,6 +262,22 @@ const projects: ProjectItem[] = [
     poster: `${import.meta.env.BASE_URL}media/video-joke-bylemans.jpg`,
   },
   {
+    title: 'Interview op Caya',
+    kind: 'Instagram-videoreeks',
+    summary:
+      'Microfoon in de hand, festivalsfeer op de achtergrond en één vraag: klaar voor het nieuwe schooljaar? Voor deze Instagram-videoreeks trok ik op Caya tussen de jongeren op zoek naar spontane antwoorden. Van het eerste idee tot de interviews voor de camera en de laatste knip in de montage: ik bracht deze aflevering van begin tot eind tot leven.',
+    role: 'Presentatie, interview, montage & idee-uitwerking',
+    mediaSrc: `${import.meta.env.BASE_URL}projecten/interview-caya/WhatsApp%20Video%202026-10-13%20at%2018.18.05.mp4`,
+    mediaAlt: 'Still uit het interview op Caya',
+    mediaType: 'video',
+    portrait: true,
+    poster: `${import.meta.env.BASE_URL}projecten/interview-caya/poster.jpg`,
+    categories: ['Content Creation'],
+    tags: ['Interview', 'Presentatie', 'Montage'],
+    link: `${import.meta.env.BASE_URL}projecten/interview-caya/WhatsApp%20Video%202026-10-13%20at%2018.18.05.mp4`,
+    linkLabel: 'Bekijk de video',
+  },
+  {
     title: 'LA Travel Vlog',
     kind: 'Travelvlog',
     summary:
@@ -291,21 +307,22 @@ const projects: ProjectItem[] = [
     linkLabel: 'Bekijk op YouTube',
     youtubeId: 'MIVGPq4eXsY',
   },
-  {
-    title: 'Lissabon Travel Vlog',
-    kind: 'Travelvlog',
-    summary:
-      'Voor deze travelvlog uit Lissabon stond ik zelf in voor zowel de beelden als de volledige montage.',
-    role: 'Opname & montage',
-    mediaSrc: '',
-    mediaAlt: 'Still uit de Lissabon Travel Vlog',
-    mediaType: 'youtube',
-    categories: ['Content Creation'],
-    tags: ['Travel', 'Opname', 'Montage'],
-    link: 'https://youtu.be/1WKM004EfDM',
-    linkLabel: 'Bekijk op YouTube',
-    youtubeId: '1WKM004EfDM',
-  },
+  // Tijdelijk verborgen: Lissabon Travel Vlog.
+  // {
+  //   title: 'Lissabon Travel Vlog',
+  //   kind: 'Travelvlog',
+  //   summary:
+  //     'Voor deze travelvlog uit Lissabon stond ik zelf in voor zowel de beelden als de volledige montage.',
+  //   role: 'Opname & montage',
+  //   mediaSrc: '',
+  //   mediaAlt: 'Still uit de Lissabon Travel Vlog',
+  //   mediaType: 'youtube',
+  //   categories: ['Content Creation'],
+  //   tags: ['Travel', 'Opname', 'Montage'],
+  //   link: 'https://youtu.be/1WKM004EfDM',
+  //   linkLabel: 'Bekijk op YouTube',
+  //   youtubeId: '1WKM004EfDM',
+  // },
   {
     title: 'Wandelroute in de kijker: Kasteel Meylandt',
     kind: 'Socialmediavideo',

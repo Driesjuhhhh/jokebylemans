@@ -5,6 +5,16 @@ const outputDir = new URL('../public/projecten/', import.meta.url)
 const lastModified = new Date().toISOString().slice(0, 10)
 
 const projects = [
+  {
+    slug: 'interview-caya',
+    title: 'Interview op Caya',
+    category: 'Content creation',
+    role: 'Presentatie, interview, montage en idee-uitwerking',
+    description: 'Microfoon in de hand, festivalsfeer op de achtergrond en één vraag: klaar voor het nieuwe schooljaar? Voor deze Instagram-videoreeks zocht Joke op Caya spontane antwoorden bij jongeren. Ze werkte het idee uit, verzorgde de presentatie en interviews en monteerde de aflevering.',
+    mediaUrl: '/projecten/interview-caya/WhatsApp%20Video%202026-10-13%20at%2018.18.05.mp4',
+    mediaType: 'video',
+    image: '/projecten/interview-caya/poster.jpg',
+  },
   {"slug": "blog-sound-of-silence", "title": "Blog: Sound of Silence", "category": "Content creation", "role": "Auteur", "description": "Deze blog schreef ik tijdens mijn opleiding Communicatie. Ik heb hier met plezier aan gewerkt.", "mediaUrl": "/media/blog-joke-bylemans.pdf", "mediaType": "pdf", "image": "/media/blog-joke-bylemans.jpg"},
   {"slug": "booktok", "title": "BookTok", "category": "Content creation", "role": "Content creator", "description": "Ik kreeg de kans om een booktok te filmen. In deze video kon ik volledig mijn creativiteit kwijt. De manier waarop je een verhaal visueel kunt brengen, is hierbij superfijn!", "mediaUrl": "/media/joke-bylemans-booktok.mp4", "mediaType": "video", "image": "/media/joke-bylemans-booktok.jpg"},
   {"slug": "video-joke-bylemans", "title": "Video Joke Bylemans", "category": "Content creation", "role": "Content creator", "description": "Deze video legt mijn passie voor radio, mijn hobby, uit. Wie is Joke achter de micro? Dat ontdek je hier!", "mediaUrl": "/media/video-joke-bylemans.mp4", "mediaType": "video", "image": "/media/video-joke-bylemans.jpg"},
@@ -90,15 +100,16 @@ const projects = [
     youtubeId: 'MIVGPq4eXsY',
     uploadDate: '2026-09-03T13:17:24-07:00',
   },
-  {
-    slug: 'lissabon-travel-vlog',
-    title: 'Lissabon Travel Vlog',
-    category: 'Content creation',
-    role: 'Opname en montage',
-    description: 'Een travelvlog uit Lissabon waarvoor Joke zelf de beelden en de volledige montage verzorgde.',
-    youtubeId: '1WKM004EfDM',
-    uploadDate: '2026-09-03T13:19:29-07:00',
-  },
+  // Tijdelijk verborgen: Lissabon Travel Vlog.
+  // {
+  //   slug: 'lissabon-travel-vlog',
+  //   title: 'Lissabon Travel Vlog',
+  //   category: 'Content creation',
+  //   role: 'Opname en montage',
+  //   description: 'Een travelvlog uit Lissabon waarvoor Joke zelf de beelden en de volledige montage verzorgde.',
+  //   youtubeId: '1WKM004EfDM',
+  //   uploadDate: '2026-09-03T13:19:29-07:00',
+  // },
   {
     slug: 'wandelroute-kasteel-meylandt',
     title: 'Wandelroute in de kijker: Kasteel Meylandt',
