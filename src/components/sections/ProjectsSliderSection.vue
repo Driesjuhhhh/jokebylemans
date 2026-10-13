@@ -389,8 +389,8 @@ const paginatedProjects = computed(() => {
 
 function toggleProjectFilter(category: ProjectCategory) {
   projectFilters.value = projectFilters.value.includes(category)
-    ? projectFilters.value.filter((activeCategory) => activeCategory !== category)
-    : [...projectFilters.value, category]
+    ? []
+    : [category]
 }
 
 const activeIndex = ref(0)
