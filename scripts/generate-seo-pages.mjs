@@ -2,7 +2,6 @@ import { mkdir, writeFile } from 'node:fs/promises'
 
 const siteUrl = 'https://jokebylemans.be'
 const outputDir = new URL('../public/projecten/', import.meta.url)
-const lastModified = new Date().toISOString().slice(0, 10)
 
 const projects = [
   {
@@ -150,6 +149,9 @@ const sharedHead = (title, description, canonical, image) => `
   <link rel="canonical" href="${canonical}">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Joke Bylemans">
+  <meta property="og:locale" content="nl_BE">
+  <meta name="twitter:card" content="summary_large_image">
   <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${canonical}">
@@ -199,5 +201,5 @@ const sitemapUrls = [
   `${siteUrl}/projecten/`,
   ...projects.map((project) => `${siteUrl}/projecten/${project.slug}/`),
 ]
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapUrls.map((url) => `  <url><loc>${url}</loc><lastmod>${lastModified}</lastmod></url>`).join('\n')}\n</urlset>\n`
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapUrls.map((url) => `  <url><loc>${url}</loc></url>`).join('\n')}\n</urlset>\n`
 await writeFile(new URL('../public/sitemap.xml', import.meta.url), sitemap)

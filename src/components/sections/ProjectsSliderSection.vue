@@ -265,7 +265,7 @@ const projects: ProjectItem[] = [
     title: 'Interview op Caya',
     kind: 'Instagram-videoreeks',
     summary:
-      'Microfoon in de hand, festivalsfeer op de achtergrond en één vraag: klaar voor het nieuwe schooljaar? Voor deze Instagram-videoreeks trok ik op Caya tussen de jongeren op zoek naar spontane antwoorden. Van het eerste idee tot de interviews voor de camera en de laatste knip in de montage: ik bracht deze aflevering van begin tot eind tot leven.',
+      'Microfoon in de hand, festivalsfeer op de achtergrond en één vraag: klaar voor het nieuwe schooljaar? Voor deze Instagram-videoreeks trok ik op Caya tussen de jongeren op zoek naar spontane antwoorden.',
     role: 'Presentatie, interview, montage & idee-uitwerking',
     mediaSrc: `${import.meta.env.BASE_URL}projecten/interview-caya/WhatsApp%20Video%202026-10-13%20at%2018.18.05.mp4`,
     mediaAlt: 'Still uit het interview op Caya',
