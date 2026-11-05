@@ -278,6 +278,21 @@ const projects: ProjectItem[] = [
     linkLabel: 'Bekijk de video',
   },
   {
+    title: 'Interview op Bandanna',
+    kind: 'Videoreeks',
+    summary:
+      'Microfoon in de hand, feestsfeer op de achtergrond: op fuif Bandanna in Mol trok ik tussen de jongeren op zoek naar spontane antwoorden. Van het eerste idee tot de interviews voor de camera en de laatste knip in de montage: ik bracht deze aflevering van begin tot eind tot leven.',
+    role: 'Presentatie, interview, montage & idee-uitwerking',
+    mediaSrc: '',
+    mediaAlt: 'Still uit het interview op fuif Bandanna',
+    mediaType: 'youtube',
+    categories: ['Content Creation'],
+    tags: ['Interview', 'Presentatie', 'Montage'],
+    link: 'https://youtu.be/Qk5oyW6w3cc',
+    linkLabel: 'Bekijk op YouTube',
+    youtubeId: 'Qk5oyW6w3cc',
+  },
+  {
     title: 'LA Travel Vlog',
     kind: 'Travelvlog',
     summary:
