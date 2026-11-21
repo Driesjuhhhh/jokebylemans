@@ -107,6 +107,32 @@ const photosFor = (section) =>
 const g = (key) => globals[key]?.data ?? {}
 const siteInfoGlobal = globals.siteInfo
 
+// Oudere publicaties hebben deze collectie nog niet: dan valt de site terug op het standaardmenu.
+const readOptional = (key) => {
+  try {
+    return read(key)
+  } catch {
+    return []
+  }
+}
+
+const menuItems = readOptional('menuItems')
+  .sort(byOrder)
+  .map((entry) => ({
+    id: entry.id,
+    title: entry.data.title,
+    style: entry.data.style ?? 'Tekst',
+    target: entry.data.target,
+    icon: entry.data.icon || undefined,
+    position: entry.data.position ?? 'Midden',
+    order: entry.data.order ?? 0,
+    visible: entry.data.visible !== false,
+    newTab: Boolean(entry.data.newTab),
+    hideOnMobile: Boolean(entry.data.hideOnMobile),
+  }))
+
+const headerData = g('header')
+
 const content = {
   siteInfo: { ...g('siteInfo'), seo: siteInfoGlobal?.seo },
   whoAmI: { title: g('whoAmI').title, paragraphs: paragraphs(g('whoAmI').body), nextPhotoHint: g('whoAmI').nextPhotoHint, photos: photosFor('wie-ben-ik') },
@@ -123,6 +149,8 @@ const content = {
   },
   educationIntro: g('educationIntro'),
   uiTexts: g('uiTexts'),
+  menuItems,
+  header: { ...headerData, logoImage: img(headerData.logoImage) },
   educations,
   projects,
 }

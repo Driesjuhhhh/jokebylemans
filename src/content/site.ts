@@ -85,13 +85,6 @@ export type RadioData = {
 
 /** Vaste teksten van de site (menu, knoppen, schermlezer). Bewerkbaar in de CMS onder "Menu en teksten"; deze waarden zijn de terugval. */
 const uiDefaults = {
-  navWhoAmI: "Wie ben ik",
-  navEducation: "Opleiding",
-  navProjects: "Projecten",
-  navRadio: "Radio",
-  navContact: "Contact",
-  instagramAria: "Instagram",
-  linkedinAria: "LinkedIn",
   cvLabel: "CV",
   linkedinLabel: "LinkedIn",
   scrollLabel: "Scroll",
@@ -137,10 +130,47 @@ const uiDefaults = {
   footerPrefix: "Developed by",
 }
 
+export type MenuPosition = 'Links' | 'Midden' | 'Rechts'
+
+export type MenuItem = {
+  id: string
+  title: string
+  style: 'Tekst' | 'Knop' | 'Icoon'
+  target: string
+  icon?: 'Instagram' | 'LinkedIn' | 'E-mail' | 'Link'
+  position: MenuPosition
+  order: number
+  visible: boolean
+  newTab: boolean
+  hideOnMobile: boolean
+}
+
+export type HeaderConfig = {
+  logoText: string
+  mobileLogoText: string
+  logoImage?: SiteImage
+  logoImageAlt: string
+  logoHref: string
+  logoPosition: MenuPosition
+}
+
+/** Terugval als de CMS (nog) geen menu levert: het oorspronkelijke menu. */
+const defaultMenu: MenuItem[] = [
+  { id: 'wie-ben-ik', title: 'Wie ben ik', style: 'Tekst', target: '#wie-ben-ik', position: 'Midden', order: 1, visible: true, newTab: false, hideOnMobile: false },
+  { id: 'opleiding', title: 'Opleiding', style: 'Tekst', target: '#opleiding', position: 'Midden', order: 2, visible: true, newTab: false, hideOnMobile: false },
+  { id: 'projecten', title: 'Projecten', style: 'Tekst', target: '#projecten', position: 'Midden', order: 3, visible: true, newTab: false, hideOnMobile: false },
+  { id: 'radio', title: 'Radio', style: 'Tekst', target: '#radio-mol', position: 'Midden', order: 4, visible: true, newTab: false, hideOnMobile: false },
+  { id: 'contact', title: 'Contact', style: 'Tekst', target: '#contact', position: 'Midden', order: 5, visible: true, newTab: false, hideOnMobile: false },
+  { id: 'instagram', title: 'Instagram', style: 'Icoon', icon: 'Instagram', target: 'https://www.instagram.com/blokkemetjokke/', position: 'Rechts', order: 1, visible: true, newTab: true, hideOnMobile: true },
+  { id: 'linkedin', title: 'LinkedIn', style: 'Icoon', icon: 'LinkedIn', target: 'https://www.linkedin.com/in/joke-bylemans-04088025b/', position: 'Rechts', order: 2, visible: true, newTab: true, hideOnMobile: true },
+]
+
 export type UiTexts = Record<keyof typeof uiDefaults, string>
 
 const content = raw as unknown as {
   uiTexts?: Partial<UiTexts>
+  menuItems?: MenuItem[]
+  header?: Partial<HeaderConfig>
   siteInfo: SiteInfo
   whoAmI: WhoAmIData
   radio: RadioData
@@ -159,6 +189,19 @@ export const ui: UiTexts = {
 /** Vervangt {n} in een CMS-tekst door een nummer. */
 export function fmt(template: string, n: number | string) {
   return template.replace('{n}', String(n))
+}
+
+const menuFromCms = (content.menuItems ?? []).filter((item) => item.visible && item.title && item.target)
+export const menuItems: MenuItem[] = (menuFromCms.length ? menuFromCms : defaultMenu).slice().sort((a, b) => a.order - b.order)
+
+const headerCms = content.header ?? {}
+export const header: HeaderConfig = {
+  logoText: headerCms.logoText || content.siteInfo.name,
+  mobileLogoText: headerCms.mobileLogoText || (headerCms.logoText || content.siteInfo.name).split(' ')[0],
+  logoImage: headerCms.logoImage,
+  logoImageAlt: headerCms.logoImageAlt || content.siteInfo.name,
+  logoHref: headerCms.logoHref || '#hero',
+  logoPosition: headerCms.logoPosition || 'Links',
 }
 
 export const siteInfo = content.siteInfo

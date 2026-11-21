@@ -105,6 +105,23 @@ export default defineSiteContent({
         { key: 'order', label: 'Volgorde', type: 'number', required: true },
       ],
     },
+    // Menu van de header: elk item is een entry met stijl, plek en volgorde.
+    menuItems: {
+      route: '/menu/$slug',
+      label: 'Menu-items',
+      fields: [
+        { key: 'title', label: 'Titel', type: 'text', required: true },
+        { key: 'slug', label: 'Slug', type: 'slug', required: true },
+        { key: 'style', label: 'Stijl', type: 'select', required: true, options: ['Tekst', 'Knop', 'Icoon'] },
+        { key: 'target', label: 'Doel (#sectie, /pad, https://… of mailto:…)', type: 'text', required: true },
+        { key: 'icon', label: 'Icoon (alleen bij stijl Icoon)', type: 'select', options: ['Instagram', 'LinkedIn', 'E-mail', 'Link'] },
+        { key: 'position', label: 'Plek in de header', type: 'select', required: true, options: ['Links', 'Midden', 'Rechts'] },
+        { key: 'order', label: 'Volgorde', type: 'number', required: true },
+        { key: 'visible', label: 'Zichtbaar', type: 'boolean' },
+        { key: 'newTab', label: 'Open in nieuw tabblad', type: 'boolean' },
+        { key: 'hideOnMobile', label: 'Verberg op telefoon', type: 'boolean' },
+      ],
+    },
   },
   globals: {
     siteInfo: {
@@ -149,17 +166,22 @@ export default defineSiteContent({
         { key: 'galleryText', label: 'Galerij: tekst', type: 'text' },
       ],
     },
+    header: {
+      label: 'Header',
+      previewPath: '/',
+      fields: [
+        { key: 'logoText', label: 'Logotekst', type: 'text', group: 'Logo', description: 'Leeg = de Naam uit Site-info.' },
+        { key: 'mobileLogoText', label: 'Logotekst op telefoon', type: 'text', group: 'Logo', description: 'Leeg = eerste woord van de logotekst.' },
+        { key: 'logoImage', label: 'Logo-afbeelding', type: 'image', group: 'Logo', description: 'Optioneel. Vervangt de logotekst als ingevuld.' },
+        { key: 'logoImageAlt', label: 'Alt-tekst logo-afbeelding', type: 'text', group: 'Logo' },
+        { key: 'logoHref', label: 'Logo-link', type: 'text', group: 'Logo', description: 'Meestal #hero.' },
+        { key: 'logoPosition', label: 'Plek van het logo', type: 'select', group: 'Logo', options: ['Links', 'Midden', 'Rechts'] },
+      ],
+    },
     uiTexts: {
       label: 'Menu en teksten',
       previewPath: '/',
       fields: [
-        { key: 'navWhoAmI', label: 'Menu: Wie ben ik', type: 'text', group: 'Menu' },
-        { key: 'navEducation', label: 'Menu: Opleiding', type: 'text', group: 'Menu' },
-        { key: 'navProjects', label: 'Menu: Projecten', type: 'text', group: 'Menu' },
-        { key: 'navRadio', label: 'Menu: Radio', type: 'text', group: 'Menu' },
-        { key: 'navContact', label: 'Menu: Contact', type: 'text', group: 'Menu' },
-        { key: 'instagramAria', label: 'Instagram-icoon (schermlezer)', type: 'text', group: 'Menu' },
-        { key: 'linkedinAria', label: 'LinkedIn-icoon (schermlezer)', type: 'text', group: 'Menu' },
         { key: 'cvLabel', label: 'Knop: CV', type: 'text', group: 'Hero' },
         { key: 'linkedinLabel', label: 'Knop: LinkedIn', type: 'text', group: 'Hero' },
         { key: 'scrollLabel', label: 'Scroll-tekst', type: 'text', group: 'Hero' },
@@ -203,6 +225,14 @@ export default defineSiteContent({
         { key: 'radioInstagramAria', label: 'Instagram Blokke Met Jokke (schermlezer)', type: 'text', group: 'Radio' },
         { key: 'radioInstagramLabel', label: 'Knop: Instagram', type: 'text', group: 'Radio' },
         { key: 'footerPrefix', label: 'Footer: tekst voor de naam', type: 'text', group: 'Footer' },
+        // Verouderd: het menu staat nu in de collectie menuItems. Verwijder in de content-model-editor.
+        { key: 'navWhoAmI', label: 'NIET MEER GEBRUIKT: menu-item (zie Menu-items)', type: 'text', group: 'Oud (niet meer gebruikt)' },
+        { key: 'navEducation', label: 'NIET MEER GEBRUIKT: menu-item (zie Menu-items)', type: 'text', group: 'Oud (niet meer gebruikt)' },
+        { key: 'navProjects', label: 'NIET MEER GEBRUIKT: menu-item (zie Menu-items)', type: 'text', group: 'Oud (niet meer gebruikt)' },
+        { key: 'navRadio', label: 'NIET MEER GEBRUIKT: menu-item (zie Menu-items)', type: 'text', group: 'Oud (niet meer gebruikt)' },
+        { key: 'navContact', label: 'NIET MEER GEBRUIKT: menu-item (zie Menu-items)', type: 'text', group: 'Oud (niet meer gebruikt)' },
+        { key: 'instagramAria', label: 'NIET MEER GEBRUIKT: instagramAria', type: 'text', group: 'Oud (niet meer gebruikt)' },
+        { key: 'linkedinAria', label: 'NIET MEER GEBRUIKT: linkedinAria', type: 'text', group: 'Oud (niet meer gebruikt)' },
       ],
     },
     educationIntro: {
