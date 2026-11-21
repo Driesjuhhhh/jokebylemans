@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { siteInfo } from '../content/site'
+import { siteInfo, ui } from '../content/site'
 
 const links = [
-  { href: '#wie-ben-ik', label: 'Wie ben ik' },
-  { href: '#opleiding', label: 'Opleiding' },
-  { href: '#projecten', label: 'Projecten' },
-  { href: '#radio-mol', label: 'Radio' },
-  { href: '#contact', label: 'Contact' },
+  { href: '#wie-ben-ik', label: ui.navWhoAmI },
+  { href: '#opleiding', label: ui.navEducation },
+  { href: '#projecten', label: ui.navProjects },
+  { href: '#radio-mol', label: ui.navRadio },
+  { href: '#contact', label: ui.navContact },
 ]
 </script>
 
@@ -37,7 +37,7 @@ const links = [
             :href="siteInfo.instagramUrl"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Instagram"
+            :aria-label="ui.instagramAria"
             class="grid h-9 w-9 place-items-center rounded-full border border-red-700/35 text-red-700 transition hover:bg-red-700 hover:text-[#f7ebe2]"
           >
             <svg viewBox="0 0 24 24" class="h-4.5 w-4.5 fill-current" aria-hidden="true">
@@ -52,7 +52,7 @@ const links = [
             :href="siteInfo.linkedinUrl"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="LinkedIn"
+            :aria-label="ui.linkedinAria"
             class="grid h-9 w-9 place-items-center rounded-full border border-red-700/35 text-red-700 transition hover:bg-red-700 hover:text-[#f7ebe2]"
           >
             <svg viewBox="0 0 24 24" class="h-4.5 w-4.5 fill-current" aria-hidden="true">

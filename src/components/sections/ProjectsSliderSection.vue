@@ -4,7 +4,7 @@ import SlideSection from './SlideSection.vue'
 import YoutubePlayer from '../ui/YoutubePlayer.vue'
 import ProjectDetailModal, { type ProjectDetail } from '../ui/ProjectDetailModal.vue'
 import { projectFilters, type ProjectCategory } from '../../state/projectFilter'
-import { projects as projectData, projectCategories, withBase, type SiteImage } from '../../content/site'
+import { projects as projectData, projectCategories, withBase, ui, fmt, type SiteImage } from '../../content/site'
 
 type ProjectItem = {
   title: string
@@ -305,7 +305,7 @@ watch(
   >
     <div class="mx-auto w-full max-w-[1320px]">
       <div class="mb-6 flex items-end justify-between gap-4">
-        <h2 class="font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.9] uppercase">Projecten</h2>
+        <h2 class="font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.9] uppercase">{{ ui.projectsTitle }}</h2>
       </div>
 
       <div class="grid gap-4 lg:grid-cols-[1fr_1.9fr] lg:gap-6">
@@ -379,7 +379,7 @@ watch(
                 />
                 <div v-else class="flex h-full w-full items-center justify-center bg-[#ead4c5] px-6 text-center">
                   <p class="text-[0.72rem] font-bold uppercase tracking-[0.12em] text-red-700/65">
-                    Media wordt geladen zodra de projecten in beeld komen
+                    {{ ui.projectsLoading }}
                   </p>
                 </div>
 
@@ -390,17 +390,17 @@ watch(
                   target="_blank"
                   rel="noopener noreferrer"
                   class="group absolute inset-0 z-20 flex cursor-zoom-in items-end justify-center p-4 pb-14 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-red-700"
-                  aria-label="Open de blog op groot formaat (PDF, nieuw tabblad)"
+                  :aria-label="ui.blogOpenAria"
                 >
                   <span class="rounded-full bg-[#f9ede4]/95 px-4 py-2 text-[0.72rem] font-bold uppercase tracking-[0.08em] text-red-700 shadow-lg transition group-hover:bg-red-700 group-hover:text-[#f9ede4] group-focus-visible:bg-red-700 group-focus-visible:text-[#f9ede4]">
-                    Klik om te vergroten ↗
+                    {{ ui.enlargeHint }}
                   </span>
                 </a>
                 <template v-if="activeProject.mediaType === 'gallery' && activeProject.gallery && activeProject.gallery.length > 1">
                   <button
                     type="button"
                     class="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#f9ede4]/60 bg-black/45 text-2xl text-[#f9ede4] transition hover:bg-black/65 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f9ede4]"
-                    aria-label="Vorige foto"
+                    :aria-label="ui.prevPhotoAria"
                     @click.stop="prevGalleryImage"
                   >
                     &#8249;
@@ -408,19 +408,19 @@ watch(
                   <button
                     type="button"
                     class="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#f9ede4]/60 bg-black/45 text-2xl text-[#f9ede4] transition hover:bg-black/65 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f9ede4]"
-                    aria-label="Volgende foto"
+                    :aria-label="ui.nextPhotoAria"
                     @click.stop="nextGalleryImage"
                   >
                     &#8250;
                   </button>
-                  <div class="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1.5" aria-label="Foto kiezen">
+                  <div class="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1.5" :aria-label="ui.choosePhotoAria">
                     <button
                       v-for="(_, index) in activeProject.gallery"
                       :key="index"
                       type="button"
                       class="h-2 rounded-full bg-[#f9ede4] transition-all"
                       :class="index === activeGalleryIndex ? 'w-6 opacity-100' : 'w-2 opacity-55 hover:opacity-85'"
-                      :aria-label="`Ga naar foto ${index + 1}`"
+                      :aria-label="fmt(ui.goToPhotoAria, index + 1)"
                       :aria-current="index === activeGalleryIndex ? 'true' : undefined"
                       @click.stop="goToGalleryImage(index)"
                     ></button>
@@ -442,7 +442,7 @@ watch(
                     :aria-pressed="false"
                     @click="toggleAudio"
                   >
-                    Klik om te unmuten
+                    {{ ui.unmuteHint }}
                   </button>
                 </div>
 
@@ -456,7 +456,7 @@ watch(
                     :aria-pressed="true"
                     @click="toggleAudio"
                   >
-                    Mute
+                    {{ ui.muteLabel }}
                   </button>
                   <div
                     class="flex items-center gap-2 rounded-full border border-[#f9ede4]/70 bg-black/55 px-3 py-1.5 opacity-100 transition md:pointer-events-none md:opacity-0 md:group-hover/volume:pointer-events-auto md:group-hover/volume:opacity-100 md:group-focus-within/volume:pointer-events-auto md:group-focus-within/volume:opacity-100"
@@ -468,7 +468,7 @@ watch(
                       max="1"
                       step="0.01"
                       class="h-1.5 w-24 cursor-pointer accent-[#f9ede4]"
-                      aria-label="Volume"
+                      :aria-label="ui.volumeAria"
                     />
                     <span class="w-10 text-right text-[0.62rem] font-bold uppercase tracking-[0.08em] text-[#f9ede4]">
                       {{ Math.round(volume * 100) }}%
@@ -494,7 +494,7 @@ watch(
                 </p>
 
                 <p class="text-[0.82rem] font-semibold uppercase tracking-[0.08em] text-red-700/80">
-                  Rol: {{ activeProject.role }}
+                  {{ ui.roleLabel }} {{ activeProject.role }}
                 </p>
 
                 <ul class="flex flex-wrap gap-2 pt-1">
@@ -524,7 +524,7 @@ watch(
                     class="inline-flex items-center rounded-full border border-red-700 px-3 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4] min-[420px]:px-4 min-[420px]:text-[0.78rem]"
                     @click="openVideoModal(activeProject.youtubeId, activeProject.title)"
                   >
-                    Bekijk volledige aflevering
+                    {{ ui.watchEpisodeLabel }}
                   </button>
                   <button
                     v-if="activeProject.detail"
@@ -532,21 +532,21 @@ watch(
                     class="inline-flex items-center rounded-full border border-red-700 px-3 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4] min-[420px]:px-4 min-[420px]:text-[0.78rem]"
                     @click="openDetailModal(activeProject.detail)"
                   >
-                    Meer info
+                    {{ ui.moreInfoLabel }}
                   </button>
                   <button
                     type="button"
                     class="inline-flex items-center rounded-full border border-red-700/35 px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-red-700/80 transition hover:border-red-700 min-[420px]:text-[0.75rem]"
                     @click="prevProjectManually"
                   >
-                    Vorige
+                    {{ ui.prevLabel }}
                   </button>
                   <button
                     type="button"
                     class="inline-flex items-center rounded-full border border-red-700/35 px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-red-700/80 transition hover:border-red-700 min-[420px]:text-[0.75rem]"
                     @click="nextProjectManually"
                   >
-                    Volgende
+                    {{ ui.nextLabel }}
                   </button>
                 </div>
               </div>
@@ -555,12 +555,12 @@ watch(
         </div>
 
         <aside class="project-list order-1 rounded-3xl border border-red-700/20 bg-[#f9ede4] p-3 shadow-[0_12px_24px_rgba(0,0,0,0.1)] md:p-4 lg:flex lg:h-[680px] lg:flex-col lg:overflow-hidden">
-          <p class="mb-3 text-[0.72rem] font-bold uppercase tracking-[0.13em] text-red-700/70">Projectlijst</p>
+          <p class="mb-3 text-[0.72rem] font-bold uppercase tracking-[0.13em] text-red-700/70">{{ ui.projectListTitle }}</p>
 
           <div
             class="mb-3 flex flex-nowrap gap-1 overflow-x-auto pb-1"
             role="group"
-            aria-label="Filter projecten op categorie"
+            :aria-label="ui.filterAria"
           >
             <button
               v-for="option in filterOptions"
@@ -598,10 +598,10 @@ watch(
           <nav
             v-if="totalListPages > 1"
             class="mt-3 border-t border-red-700/15 pt-3"
-            aria-label="Projectpagina's"
+            :aria-label="ui.pagerAria"
           >
             <p class="mb-2 text-center text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-red-700/65">
-              {{ visibleProjectRange }} projecten
+              {{ visibleProjectRange }} {{ ui.projectsWord }}
             </p>
             <div class="flex items-center justify-between gap-2">
               <button
@@ -610,10 +610,10 @@ watch(
                 :disabled="currentListPage === 0"
                 @click="goToListPage(currentListPage - 1)"
               >
-                Vorige
+                {{ ui.prevLabel }}
               </button>
 
-              <div class="flex items-center gap-1" aria-label="Pagina kiezen">
+              <div class="flex items-center gap-1" :aria-label="ui.choosePageAria">
                 <button
                   v-for="page in totalListPages"
                   :key="page"
@@ -622,7 +622,7 @@ watch(
                   :class="currentListPage === page - 1
                     ? 'border-red-700 bg-red-700 text-[#f9ede4]'
                     : 'border-red-700/25 bg-white/55 text-red-700 hover:border-red-700/60'"
-                  :aria-label="`Ga naar projectpagina ${page}`"
+                  :aria-label="fmt(ui.goToPageAria, page)"
                   :aria-current="currentListPage === page - 1 ? 'page' : undefined"
                   @click="goToListPage(page - 1)"
                 >
@@ -636,7 +636,7 @@ watch(
                 :disabled="currentListPage === totalListPages - 1"
                 @click="goToListPage(currentListPage + 1)"
               >
-                Volgende
+                {{ ui.nextLabel }}
               </button>
             </div>
           </nav>
@@ -658,13 +658,13 @@ watch(
             class="absolute -top-10 right-0 text-[0.78rem] font-bold uppercase tracking-[0.1em] text-[#f9ede4] transition hover:text-red-300"
             @click="closeVideoModal"
           >
-            Sluiten ✕
+            {{ ui.closeLabel }}
           </button>
           <div class="aspect-video w-full overflow-hidden rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.5)]">
             <iframe
               :src="`https://www.youtube.com/embed/${modalYoutubeId}?autoplay=1&rel=0&modestbranding=1&cc_load_policy=0`"
               class="h-full w-full"
-              title="Volledige aflevering"
+              :title="ui.episodeFrameTitle"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowfullscreen
             ></iframe>

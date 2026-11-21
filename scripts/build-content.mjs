@@ -122,6 +122,7 @@ const content = {
     photos: photosFor('radio'),
   },
   educationIntro: g('educationIntro'),
+  uiTexts: g('uiTexts'),
   educations,
   projects,
 }

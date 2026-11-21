@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import SlideSection from './SlideSection.vue'
 import PolaroidPhoto from '../ui/PolaroidPhoto.vue'
 
-import { whoAmI } from '../../content/site'
+import { whoAmI, ui } from '../../content/site'
 
 const photos = whoAmI.photos
 
@@ -73,7 +73,7 @@ const showNextPhoto = () => {
           type="button"
           class="absolute right-0 top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-[#c80f12] text-3xl font-bold leading-none text-white shadow-[0_10px_22px_rgba(0,0,0,0.28)] transition hover:scale-105 hover:bg-[#a80d10] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c80f12] focus-visible:ring-offset-2 lg:-right-4 xl:right-8"
           @click="showNextPhoto"
-          aria-label="Volgende foto"
+          :aria-label="ui.whoNextPhotoAria"
         >
           <span aria-hidden="true">›</span>
         </button>

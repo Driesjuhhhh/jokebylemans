@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SlideSection from './SlideSection.vue'
-import { siteInfo } from '../../content/site'
+import { siteInfo, ui } from '../../content/site'
 
 const cvHref = siteInfo.cvUrl
 
@@ -36,7 +36,7 @@ function trackSocialClick(eventName: string) {
           class="hero-social-btn"
           @click="trackCvClick"
         >
-          CV
+          {{ ui.cvLabel }}
         </a>
         <a
           :href="siteInfo.instagramUrl"
@@ -54,12 +54,12 @@ function trackSocialClick(eventName: string) {
           class="hero-social-btn"
           @click="trackSocialClick('LinkedIn Click')"
         >
-          LinkedIn
+          {{ ui.linkedinLabel }}
         </a>
       </div>
 
-      <a href="#wie-ben-ik" class="hero-scroll" aria-label="Scroll naar Wie ben ik">
-        <span class="hero-scroll-label">Scroll</span>
+      <a href="#wie-ben-ik" class="hero-scroll" :aria-label="ui.scrollAria">
+        <span class="hero-scroll-label">{{ ui.scrollLabel }}</span>
         <span class="hero-scroll-track" aria-hidden="true">
           <span class="hero-scroll-arrow"></span>
         </span>

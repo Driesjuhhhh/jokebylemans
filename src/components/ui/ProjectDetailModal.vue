@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ui, fmt } from '../../content/site'
+
 export type ProjectDetailPhase = {
   title: string
   description: string
@@ -68,10 +70,10 @@ function prevImage() {
         class="z-10 mb-3 ml-auto mr-3 mt-3 shrink-0 rounded-full border border-red-700/40 bg-[#f9ede4]/90 px-3 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4]"
         @click="$emit('close')"
       >
-        Sluiten ✕
+        {{ ui.closeLabel }}
       </button>
 
-      <div class="detail-scroll min-h-0 overflow-y-auto overscroll-contain space-y-6 px-5 pb-8 pt-0 md:mb-5 md:mr-2 md:px-9" tabindex="0" aria-label="Projectinformatie">
+      <div class="detail-scroll min-h-0 overflow-y-auto overscroll-contain space-y-6 px-5 pb-8 pt-0 md:mb-5 md:mr-2 md:px-9" tabindex="0" :aria-label="ui.detailAria">
         <header class="space-y-2">
           <p class="text-[0.74rem] font-bold uppercase tracking-[0.13em] text-red-700/70">{{ detail.tagline }}</p>
           <h3 class="font-display text-[clamp(1.9rem,5vw,3.2rem)] leading-[0.92] uppercase">{{ detail.title }}</h3>
@@ -93,7 +95,7 @@ function prevImage() {
               <button
                 type="button"
                 class="absolute left-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-lg text-[#f9ede4] transition hover:bg-black/65"
-                aria-label="Vorige foto"
+                :aria-label="ui.prevPhotoAria"
                 @click="prevImage"
               >
                 ‹
@@ -101,7 +103,7 @@ function prevImage() {
               <button
                 type="button"
                 class="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-lg text-[#f9ede4] transition hover:bg-black/65"
-                aria-label="Volgende foto"
+                :aria-label="ui.nextPhotoAria"
                 @click="nextImage"
               >
                 ›
@@ -118,14 +120,14 @@ function prevImage() {
               type="button"
               class="h-1.5 rounded-full transition"
               :class="index === activeImageIndex ? 'w-5 bg-red-700' : 'w-1.5 bg-red-700/30'"
-              :aria-label="`Ga naar foto ${index + 1}`"
+              :aria-label="fmt(ui.goToPhotoAria, index + 1)"
               @click="activeImageIndex = index"
             ></button>
           </div>
         </section>
 
         <section>
-          <h4 class="mb-3 text-[0.78rem] font-bold uppercase tracking-[0.13em] text-red-700/70">Hoe verloopt het programma?</h4>
+          <h4 class="mb-3 text-[0.78rem] font-bold uppercase tracking-[0.13em] text-red-700/70">{{ ui.detailProgramTitle }}</h4>
           <ol class="space-y-3">
             <li
               v-for="(phase, index) in detail.phases"
@@ -144,7 +146,7 @@ function prevImage() {
         </section>
 
         <section>
-          <h4 class="mb-2 text-[0.78rem] font-bold uppercase tracking-[0.13em] text-red-700/70">Gemaakt door</h4>
+          <h4 class="mb-2 text-[0.78rem] font-bold uppercase tracking-[0.13em] text-red-700/70">{{ ui.detailMadeBy }}</h4>
           <ul class="flex flex-wrap gap-2">
             <li
               v-for="member in detail.team"
@@ -157,7 +159,7 @@ function prevImage() {
         </section>
 
         <section>
-          <h4 class="mb-2 text-[0.78rem] font-bold uppercase tracking-[0.13em] text-red-700/70">Context</h4>
+          <h4 class="mb-2 text-[0.78rem] font-bold uppercase tracking-[0.13em] text-red-700/70">{{ ui.detailContext }}</h4>
           <p class="max-w-[70ch] text-[0.92rem] leading-[1.5] text-red-700/90">{{ detail.context }}</p>
         </section>
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { ui } from '../content/site'
 
 const props = withDefaults(
   defineProps<{
@@ -184,13 +185,13 @@ onBeforeUnmount(() => {
       @pointerdown="onPointerDown"
     >
       <div class="mb-2 flex items-center justify-between gap-3">
-        <p class="text-[0.66rem] font-bold uppercase tracking-[0.14em] text-red-700/75">Radio Mol</p>
+        <p class="text-[0.66rem] font-bold uppercase tracking-[0.14em] text-red-700/75">{{ ui.radioWidgetTitle }}</p>
         <button
           type="button"
           class="inline-flex items-center rounded-full border border-red-700/35 px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.1em] text-red-700/80 transition hover:border-red-700 hover:bg-red-700 hover:text-[#f9ede4]"
           @click="closePlayer"
         >
-          Sluiten
+          {{ ui.radioWidgetClose }}
         </button>
       </div>
 
@@ -200,7 +201,7 @@ onBeforeUnmount(() => {
         scrolling="no"
         frameborder="no"
         allow="autoplay"
-        title="TuneIn player Radio Mol"
+        :title="ui.tuneinTitle"
       ></iframe>
     </aside>
   </Teleport>

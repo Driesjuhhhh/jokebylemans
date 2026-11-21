@@ -3,7 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import HeaderNavigation from './components/HeaderNavigation.vue'
-import { siteInfo } from './content/site'
+import { siteInfo, ui } from './content/site'
 
 import HeroSection from './components/sections/HeroSection.vue'
 import WhoAmISection from './components/sections/WhoAmISection.vue'
@@ -184,7 +184,7 @@ onBeforeUnmount(() => {
     </div>
   </main>
   <footer class="relative z-10 border-t border-red-700/20 bg-[#f7ebe2] px-5 pt-4 pb-[calc(1.1rem+env(safe-area-inset-bottom))] text-center text-xs text-red-700 md:px-8 md:py-4 md:text-sm">
-    &copy; {{ currentYear }}. Developed by <a
+    &copy; {{ currentYear }}. {{ ui.footerPrefix }} <a
       :href="siteInfo.footerCreditUrl"
       target="_blank"
       rel="noopener noreferrer"

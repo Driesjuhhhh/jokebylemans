@@ -3,7 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import SlideSection from './SlideSection.vue'
 import PolaroidPhoto from '../ui/PolaroidPhoto.vue'
 
-import { radio, siteInfo } from '../../content/site'
+import { radio, siteInfo, ui } from '../../content/site'
 
 const emit = defineEmits<{
   (event: 'listen-now'): void
@@ -37,7 +37,7 @@ const isLiveNow = computed(() => {
 })
 
 const liveStatusLabel = computed(() =>
-  isLiveNow.value ? 'Live now' : radio.scheduleLabel
+  isLiveNow.value ? ui.liveNowLabel : radio.scheduleLabel
 )
 
 function showIframePlayer() {
@@ -93,7 +93,7 @@ onBeforeUnmount(() => {
               class="inline-flex items-center rounded-full border border-red-700 px-4 py-2 text-[0.76rem] font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4]"
               @click="showIframePlayer"
             >
-              Luister nu op deze pagina
+              {{ ui.listenNowLabel }}
             </button>
             <a
               :href="radioMolUrl"
@@ -101,7 +101,7 @@ onBeforeUnmount(() => {
               rel="noopener noreferrer"
               class="inline-flex items-center rounded-full border border-red-700/35 px-4 py-2 text-[0.74rem] font-semibold uppercase tracking-[0.1em] text-red-700/80 transition hover:border-red-700"
             >
-              Programmapagina
+              {{ ui.programPageLabel }}
             </a>
           </div>
         </article>
@@ -119,7 +119,7 @@ onBeforeUnmount(() => {
 
           <PolaroidPhoto
             :src="radioImage"
-            alt="Now Playing kaart van Blokke Met Jokke"
+            :alt="ui.nowPlayingAlt"
             wrapper-class="z-20 hidden h-[170px] w-full min-[420px]:h-[210px] md:h-[250px] lg:absolute lg:left-4 lg:top-[4.45rem] lg:block lg:h-[250px] lg:w-[250px] xl:left-10 xl:top-[3.9rem] xl:h-[340px] xl:w-[340px]"
             rotate-class="-rotate-[4deg] lg:-rotate-[10deg]"
           />
@@ -139,14 +139,14 @@ onBeforeUnmount(() => {
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center gap-2 rounded-full border border-red-700 px-4 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f7ebe2]"
-            aria-label="Instagram van Blokke Met Jokke"
+            :aria-label="ui.radioInstagramAria"
           >
             <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true">
               <path
                 d="M7.25 2h9.5A5.26 5.26 0 0 1 22 7.25v9.5A5.26 5.26 0 0 1 16.75 22h-9.5A5.26 5.26 0 0 1 2 16.75v-9.5A5.26 5.26 0 0 1 7.25 2Zm0 1.8A3.46 3.46 0 0 0 3.8 7.25v9.5a3.46 3.46 0 0 0 3.45 3.45h9.5a3.46 3.46 0 0 0 3.45-3.45v-9.5a3.46 3.46 0 0 0-3.45-3.45h-9.5Zm4.75 2.55a5.65 5.65 0 1 1 0 11.3 5.65 5.65 0 0 1 0-11.3Zm0 1.8a3.85 3.85 0 1 0 0 7.7 3.85 3.85 0 0 0 0-7.7Zm5.88-.84a1.34 1.34 0 1 1-2.68 0 1.34 1.34 0 0 1 2.68 0Z"
               />
             </svg>
-            Instagram
+            {{ ui.radioInstagramLabel }}
           </a>
         </div>
 
