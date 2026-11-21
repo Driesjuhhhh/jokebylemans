@@ -5,13 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "content:pull": "areca pull",
+    "content:build": "node scripts/build-content.mjs",
     "generate:seo": "node scripts/generate-seo-pages.mjs",
-    "build": "npm run generate:seo && vue-tsc -b && vite build",
+    "build": "npm run content:pull && npm run content:build && npm run generate:seo && vue-tsc -b && vite build",
+    "build:offline": "npm run generate:seo && vue-tsc -b && vite build",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
+    "@areca-cms/site-sdk": "^0.11.1",
     "@fontsource/anton": "^5.3.0",
     "@fontsource/chewy": "^5.3.0",
     "@fontsource/poppins": "^5.3.0",
@@ -30,6 +33,7 @@
     "typescript": "~6.0.2",
     "vite": "^7.3.6",
     "vite-plugin-vue-devtools": "^8.2.1",
-    "vue-tsc": "^3.2.6"
+    "vue-tsc": "^3.2.6",
+    "wrangler": "^4.166.0"
   }
 }

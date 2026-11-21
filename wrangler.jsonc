@@ -1,0 +1,12 @@
+{
+  // Statische site: de gebouwde Vue-app (dist/) wordt als assets geserveerd.
+  // Zet in Cloudflare per omgeving (dev / staging / prod) de variabelen
+  // ARECA_CMS_URL en ARECA_SITE_TOKEN, zodat `areca pull` de juiste content ophaalt.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jokebylemans",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}

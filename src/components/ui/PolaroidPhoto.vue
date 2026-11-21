@@ -5,6 +5,7 @@ defineProps<{
   rotateClass?: string
   wrapperClass?: string
   imageClass?: string
+  imageFocus?: string
 }>()
 </script>
 
@@ -23,6 +24,7 @@ defineProps<{
       loading="lazy"
       decoding="async"
       :class="['h-full w-full object-cover', imageClass]"
+      :style="imageFocus ? { objectPosition: imageFocus } : undefined"
     />
   </figure>
 </template>

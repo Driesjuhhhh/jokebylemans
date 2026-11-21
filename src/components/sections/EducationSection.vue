@@ -5,46 +5,7 @@ const emit = defineEmits<{
   openReconstructie: []
 }>()
 
-import batacCutting from '../../assets/batac-cutting.webp'
-import pxlMicImage from '../../assets/rm-mic.webp'
-
-type EducationItem = {
-  period: string
-  institution: string
-  program: string
-  description: string
-  highlight: string
-  imageSrc: string
-  imageAlt: string
-  imagePositionClass?: string
-  hasMoreInfo?: boolean
-}
-
-const educations: EducationItem[] = [
-  {
-    period: '2022 - 2025',
-    institution: 'Hogeschool PXL',
-    program: 'Communicatie',
-    description:
-      'Tijdens deze opleiding (her)ontdekte ik mijn passie voor taal en presenteren. Ik begon mijn eigen radioprogramma; zowel op PXL Radio als op Radio Mol. ',
-    highlight: 'Start van mijn eigen radioprogramma op PXL Radio en Radio Mol.',
-    imageSrc: pxlMicImage,
-    imageAlt: 'Joke met microfoon in PXL-studio',
-  },
-  {
-    period: '2025 - 2026',
-    institution: 'Thomas More',
-    program: 'BATAC - Multicamera',
-    description: 'Tijdens deze opleiding leerde ik enorm veel bij over hoe tv-programma’s achter de schermen gemaakt worden; zowel op productioneel als redactioneel vlak. Ik verbreedde hierdoor mijn kennis over het medialandschap én legde connecties.',
-    highlight: 'Een eigen studioshow!',
-    imageSrc: batacCutting,
-    imageAlt: 'Joke in de studio van Radio Mol',
-    imagePositionClass: 'object-[50%_61%]',
-    hasMoreInfo: true,
-  },
-
-]
-
+import { educations, educationIntro } from '../../content/site'
 </script>
 
 <template>
@@ -56,7 +17,7 @@ const educations: EducationItem[] = [
   >
     <div class="mx-auto w-full max-w-[1320px]">
       <div class="mb-4 flex items-end justify-between gap-4">
-        <h2 class="font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.9] uppercase">Opleiding</h2>
+        <h2 class="font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.9] uppercase">{{ educationIntro.title }}</h2>
       </div>
 
       <div class="timeline relative space-y-4 md:space-y-5">
@@ -94,7 +55,7 @@ const educations: EducationItem[] = [
                 class="mt-3 inline-flex items-center rounded-full border border-red-700 px-3.5 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f9ede4]"
                 @click="emit('openReconstructie')"
               >
-                Meer info
+                {{ educationIntro.moreInfoLabel }}
               </button>
             </div>
 
@@ -106,8 +67,8 @@ const educations: EducationItem[] = [
                 decoding="async"
                 :class="[
                   'h-[180px] w-full rounded-xl object-cover md:h-[250px] lg:h-[280px]',
-                  item.imagePositionClass ?? ''
                 ]"
+                :style="item.imagePosition ? { objectPosition: item.imagePosition } : undefined"
               />
             </figure>
           </div>

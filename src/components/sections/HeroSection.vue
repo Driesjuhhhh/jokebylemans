@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import SlideSection from './SlideSection.vue'
+import { siteInfo } from '../../content/site'
 
-const cvHref = 'https://canva.link/8p8itjkd9re6m8m'
+const cvHref = siteInfo.cvUrl
 
 function trackCvClick() {
   ;(window as Window & { plausible?: (...args: any[]) => void }).plausible?.('CV Click')
@@ -21,11 +22,11 @@ function trackSocialClick(eventName: string) {
   >
     <div class="hero-content">
       <p class="hero-word" aria-hidden="true">
-        <span class="hero-shadow" aria-hidden="true">PORTFOLIO</span>
-        <span class="hero-main">PORTFOLIO</span>
+        <span class="hero-shadow" aria-hidden="true">{{ siteInfo.heroWord }}</span>
+        <span class="hero-main">{{ siteInfo.heroWord }}</span>
       </p>
-      <h1 class="hero-name">JOKE BYLEMANS</h1>
-      <p class="hero-tagline">Presentatrice · Voice-over · Multicamera · Content Creator</p>
+      <h1 class="hero-name">{{ siteInfo.name.toUpperCase() }}</h1>
+      <p class="hero-tagline">{{ siteInfo.tagline }}</p>
 
       <div class="hero-socials">
         <a
@@ -38,16 +39,16 @@ function trackSocialClick(eventName: string) {
           CV
         </a>
         <a
-          href="https://www.instagram.com/blokkemetjokke/"
+          :href="siteInfo.instagramUrl"
           target="_blank"
           rel="noopener noreferrer"
           class="hero-social-btn"
           @click="trackSocialClick('Instagram Click')"
         >
-          Blokke Met Jokke
+          {{ siteInfo.instagramLabel }}
         </a>
         <a
-          href="https://www.linkedin.com/in/joke-bylemans-04088025b/"
+          :href="siteInfo.linkedinUrl"
           target="_blank"
           rel="noopener noreferrer"
           class="hero-social-btn"

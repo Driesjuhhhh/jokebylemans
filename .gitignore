@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Areca CMS: opgehaalde content wordt bij elke build opnieuw gedownload
+src/generated/content/
+public/areca/
+src/generated/site-content.json

@@ -4,30 +4,7 @@ import SlideSection from './SlideSection.vue'
 import YoutubePlayer from '../ui/YoutubePlayer.vue'
 import ProjectDetailModal, { type ProjectDetail } from '../ui/ProjectDetailModal.vue'
 import { projectFilters, type ProjectCategory } from '../../state/projectFilter'
-
-import keizersPinguing from '../../assets/pinguing-optimized.mp4'
-import deWijers from '../../assets/Hoe is het landschap in De Wijers ontstaan.mp4'
-import lily from '../../assets/lilly.mp4'
-import tsjernobyl from '../../assets/Tsjerno.webp'
-import deReconstructieTrailer from '../../assets/batac-de-reconstructie-trailer-optimized.mp4'
-import reconstructieRegie from '../../assets/reconstructie-regie.webp'
-import reconstructieCast from '../../assets/reconstructie-cast.webp'
-import reconstructieStudio from '../../assets/reconstructie-studio.webp'
-import reconstructieTeam from '../../assets/reconstructie-team.webp'
-import reconstructieInterview from '../../assets/reconstructie-interview.webp'
-import reconstructiePauze from '../../assets/reconstructie-pauze.webp'
-import reconstructieRegie2 from '../../assets/reconstructie-regie2.webp'
-import pukkelpopLivecamera from '../../assets/pukkelpop-livecamera.webp'
-import pukkelpopStage from '../../assets/pukkelpop-stage.webp'
-import pukkelpopRegie from '../../assets/pukkelpop-regie.webp'
-import pukkelpopSfeer from '../../assets/pukkelpop-sfeer.webp'
-import horstRegie from '../../assets/horst-regie.webp'
-import horstCamera from '../../assets/horst-camera.webp'
-
-type ProjectImage = {
-  src: string
-  alt: string
-}
+import { projects as projectData, projectCategories, withBase, type SiteImage } from '../../content/site'
 
 type ProjectItem = {
   title: string
@@ -40,7 +17,7 @@ type ProjectItem = {
   previewLink?: string
   portrait?: boolean
   poster?: string
-  gallery?: ProjectImage[]
+  gallery?: SiteImage[]
   youtubeId?: string
   categories: ProjectCategory[]
   tags: string[]
@@ -49,348 +26,32 @@ type ProjectItem = {
   detail?: ProjectDetail
 }
 
-const projects: ProjectItem[] = [
-  {
-    title: 'De Keizerspinguin',
-    kind: 'Korte Documentaire',
-    summary:
-      'Bij Chris Dusauchoit leerden we een korte documentaire inspreken. Ik merkte meteen hoe leuk ik dat vond. Thuis oefende ik uren en daaruit kwam dit resultaat.',
-    role: 'Voice-over',
-    mediaSrc: keizersPinguing,
-    mediaAlt: 'Still uit De Keizerspinguin',
-    mediaType: 'video',
-    categories: ['Voice-over'],
-    tags: ['Documentaire', 'Stemwerk', 'Audio'],
-    link: keizersPinguing,
-    linkLabel: 'Bekijk fragment',
-  },
-  {
-    title: 'De Wijers',
-    kind: 'Natuur Voice-over',
-    summary:
-      'Deze passie trok ik door in mijn stage bij Regionaal Landschap Lage Kempen. In samenwerking met podcastbedrijf De Praeters sprak ik een voice-over in voor het natuurgebied De Wijers.',
-    role: 'Voice-over in samenwerking met De Praeters',
-    mediaSrc: deWijers,
-    mediaAlt: 'Still uit De Wijers',
-    mediaType: 'video',
-    categories: ['Voice-over'],
-    tags: ['Natuur', 'Stage', 'Voice-over'],
-    link: deWijers,
-    linkLabel: 'Bekijk fragment',
-  },
-  {
-    title: 'Lily De Libel',
-    kind: 'Kinderwandeling',
-    summary:
-      'In de gemeente Tessenderlo-Ham wilden ze een natuurwandeling op kinderformaat, geleid door Lily de libel. Ook hiervan mocht ik de stem inspreken.',
-    role: 'Stem van Lily de libel',
-    mediaSrc: lily,
-    mediaAlt: 'Still uit Lily De Libel',
-    mediaType: 'video',
-    categories: ['Voice-over'],
-    tags: ['Kinderen', 'Natuur', 'Stemacteren'],
-    link: lily,
-    linkLabel: 'Bekijk fragment',
-  },
-  {
-    title: '40 Jaar Tsjernobyl',
-    kind: 'Talkshow',
-    summary:
-      'En ook al sta ik meestal achter de camera, mocht ik tijdens deze talkshow voor de camera plaatsnemen.',
-    role: 'Presentatrice',
-    mediaSrc: tsjernobyl,
-    mediaAlt: 'Still van de talkshow 40 Jaar Tsjernobyl',
-    mediaType: 'image',
-    categories: ['Presentatie'],
-    tags: ['Talkshow', 'Studio', 'Presentatie'],
-    youtubeId: '5IJnxNpA8LE',
-  },
-  {
-    title: 'De Reconstructie',
-    kind: 'Studio Misdaadprogramma',
-    summary:
-      'Samen met Martha Amougou en Zihna Van Genechten maakte ik De Reconstructie: een studioprogramma als opdracht voor onze bachelorproef. In dit spelprogramma gaan twee kandidaat-speurders op zoek naar bewijsmaterialen op de plaats delict. Aan de hand van die bewijzen proberen ze samen als duo de reconstructie van de misdaad te vormen.',
-    role: 'Regisseur',
-    mediaSrc: deReconstructieTrailer,
-    mediaAlt: 'Still uit de trailer van De Reconstructie',
-    mediaType: 'video',
-    categories: ['Multicamera'],
-    tags: ['BATAC', 'Studio', 'Misdaadprogramma'],
-    youtubeId: 'nw-miMTtIoU',
-    detail: {
-      title: 'De Reconstructie',
-      tagline: 'Studio misdaadprogramma · Bachelorproef BATAC',
-      intro:
-        'Een meeslepend misdaadprogramma waarin een duo van kandidaat-speurders de rol van echte rechercheurs op zich neemt. Aan de hand van bewijsmateriaal proberen ze een intrigerende zaak helemaal te ontrafelen.',
-      phases: [
-        {
-          title: 'Plaats delict',
-          description: 'De kandidaten bezoeken de plaats delict en speuren er naar bewijsmateriaal.',
-        },
-        {
-          title: 'Expertise',
-          description: 'Een forensisch expert geeft extra inzichten en duiding bij de verzamelde bewijsstukken.',
-        },
-        {
-          title: 'Reconstructie',
-          description: 'In de finale leggen de kandidaten alle puzzelstukken samen en presenteren ze hun reconstructie van de feiten.',
-        },
-      ],
-      team: ['Joke Bylemans', 'Martha Amougou', 'Zihna Van Genechten'],
-      context:
-        'De Reconstructie is de bachelorproef van Joke, Martha en Zihna binnen de opleiding BATAC (Bachelor na Bachelor in Applied Audiovisual Communication) aan Thomas More Hogeschool in Mechelen, afgerond in 2026. Het programma won de prijs voor beste BATAC Multicamera-programma van dat jaar.',
-      externalUrl: 'https://new.express.adobe.com/webpage/ONtBSCpZd3wUE',
-      externalLinkLabel: 'Bekijk de volledige projectpagina',
-      images: [
-        { src: reconstructieRegie, alt: 'Regie in de controlekamer tijdens De Reconstructie' },
-        { src: reconstructieCast, alt: 'De kandidaten van De Reconstructie op de set' },
-        { src: reconstructieStudio, alt: 'De studio-opstelling van De Reconstructie' },
-        { src: reconstructieTeam, alt: 'Het volledige team achter De Reconstructie' },
-        { src: reconstructieInterview, alt: 'Opname achter de schermen bij De Reconstructie' },
-        { src: reconstructiePauze, alt: 'Een pauzemoment tijdens de opnames van De Reconstructie' },
-        { src: reconstructieRegie2, alt: 'De regie volgt de camerabeelden tijdens De Reconstructie' },
-      ],
-    },
-  },
-  {
-    title: 'EFP - Nieuwsbericht',
-    kind: 'Fictief Nieuwsbericht',
-    summary:
-      'Dit nieuwsbericht maakten we als EFP tijdens een spelshow. Het is dus een fictief verhaal, waarbij we de productie, het scenario en shotlist verzorgden.',
-    role: 'Productie, scenario & shotlist',
-    mediaSrc: '',
-    mediaAlt: 'Still uit het EFP-nieuwsbericht',
-    mediaType: 'youtube',
-    categories: ['Presentatie'],
-    tags: ['EFP', 'Nieuwsbericht', 'Spelshow'],
-    link: 'https://youtu.be/NlrsdHlkavk',
-    linkLabel: 'Bekijk op YouTube',
-    youtubeId: 'NlrsdHlkavk',
-  },
-  {
-    title: 'Battle of the Beats',
-    kind: 'Studio Muziekquiz',
-    summary:
-      'Bij Battle of the Beats nemen vier kandidaten uit verschillende generaties het tegen elkaar op met hun muzikale kennis. Als onderdeel van mijn opleiding BATAC aan Thomas More nam ik de regie van dit studioprogramma op me.',
-    role: 'Regisseur',
-    mediaSrc: '',
-    mediaAlt: 'Still uit Battle of the Beats',
-    mediaType: 'youtube',
-    categories: ['Multicamera'],
-    tags: ['BATAC', 'Studio', 'Muziekquiz'],
-    link: 'https://youtu.be/XBqfetEI5As',
-    linkLabel: 'Bekijk op YouTube',
-    youtubeId: 'XBqfetEI5As',
-  },
-  {
-    title: 'Pukkelpop',
-    kind: 'Festival Livestream',
-    summary:
-      'Op Pukkelpop 2026 werkte ik op vrijwillige basis als cameraoperator. Zo was mijn beeld af en toe te zien in de multicameralivestream die via VRT MAX werd uitgezonden. Bovendien mocht ik in de Boiler Room werken met een gimbal en een handycam, en bediende ik er een aantal PTZ-camera’s.',
-    role: 'Livecameraoperator',
-    mediaSrc: pukkelpopLivecamera,
-    mediaAlt: 'Joke met een livecamera achter de schermen op Pukkelpop',
-    mediaType: 'gallery',
-    gallery: [
-      { src: pukkelpopLivecamera, alt: 'Joke met een livecamera achter de schermen op Pukkelpop' },
-      { src: pukkelpopStage, alt: 'Livecamera aan het podium van Pukkelpop tijdens Captain Comedy All Stars' },
-      { src: pukkelpopRegie, alt: 'Multicameraregie van de livestream op Pukkelpop' },
-      { src: pukkelpopSfeer, alt: 'Joke en een collega bij de Pukkelpop-fotowand' },
-    ],
-    categories: ['Multicamera'],
-    tags: ['Pukkelpop', 'VRT MAX', 'Livestream'],
-  },
-  {
-    title: 'Stage bij Slash9 Productions',
-    kind: 'Multicamera Livestream',
-    summary:
-      'Tijdens mijn stage bij Slash9 Productions werkte ik mee aan de multicameracaptatie voor de livestream van Horst Festival.',
-    role: 'Stagiair multicamera',
-    mediaSrc: horstRegie,
-    mediaAlt: 'Aan de regietafel voor de livestream van Horst Festival',
-    mediaType: 'gallery',
-    gallery: [
-      { src: horstRegie, alt: 'Aan de regietafel voor de livestream van Horst Festival' },
-      { src: horstCamera, alt: 'Cameraopname tijdens Horst Festival' },
-    ],
-    categories: ['Multicamera'],
-    tags: ['Slash9 Productions', 'Horst Festival', 'Stage', 'Livestream'],
-  },
-  {
-    title: "Blog: Sound of Silence",
-    kind: "Blog",
-    summary: "Deze blog schreef ik tijdens mijn opleiding Communicatie. Ik heb hier met plezier aan gewerkt.",
-    role: "Auteur",
-    mediaSrc: `${import.meta.env.BASE_URL}media/blog-joke-bylemans.jpg`,
-    mediaAlt: "Eerste pagina van de blog: Hoe creëer jij de ideale Sound of Silence?",
-    mediaType: "image",
-    tags: ["Blog", "Communicatie"],
-    link: `${import.meta.env.BASE_URL}media/blog-joke-bylemans.pdf`,
-    linkLabel: "Lees de blog (PDF)",
-    previewLink: `${import.meta.env.BASE_URL}media/blog-joke-bylemans.pdf`,
-    categories: ['Content Creation'],
-    portrait: true,
-  },
-  {
-    title: "BookTok",
-    kind: "BookTok",
-    summary: "Ik kreeg de kans om een booktok te filmen. In deze video kon ik volledig mijn creativiteit kwijt. De manier waarop je een verhaal visueel kunt brengen, is hierbij superfijn!",
-    role: "Content creator",
-    mediaSrc: `${import.meta.env.BASE_URL}media/joke-bylemans-booktok.mp4`,
-    mediaAlt: "BookTok van Joke Bylemans",
-    mediaType: "video",
-    tags: ["BookTok", "Video", "Creativiteit"],
-    link: `${import.meta.env.BASE_URL}media/joke-bylemans-booktok.mp4`,
-    linkLabel: "Bekijk de video",
-    categories: ['Content Creation'],
-    portrait: true,
-    poster: `${import.meta.env.BASE_URL}media/joke-bylemans-booktok.jpg`,
-  },
-  {
-    title: "Video Joke Bylemans",
-    kind: "Persoonlijke video",
-    summary: "Deze video legt mijn passie voor radio, mijn hobby, uit. Wie is Joke achter de micro? Dat ontdek je hier!",
-    role: "Content creator",
-    mediaSrc: `${import.meta.env.BASE_URL}media/video-joke-bylemans.mp4`,
-    mediaAlt: "Joke Bylemans vertelt over haar passie voor radio",
-    mediaType: "video",
-    tags: ["Radio", "Video"],
-    link: `${import.meta.env.BASE_URL}media/video-joke-bylemans.mp4`,
-    linkLabel: "Bekijk de video",
-    categories: ['Content Creation'],
-    portrait: true,
-    poster: `${import.meta.env.BASE_URL}media/video-joke-bylemans.jpg`,
-  },
-  {
-    title: 'Interview op Caya',
-    kind: 'Instagram-videoreeks',
-    summary:
-      'Microfoon in de hand, festivalsfeer op de achtergrond en één vraag: klaar voor het nieuwe schooljaar? Voor deze Instagram-videoreeks trok ik op Caya tussen de jongeren op zoek naar spontane antwoorden.',
-    role: 'Presentatie, interview, montage & idee-uitwerking',
-    mediaSrc: `${import.meta.env.BASE_URL}projecten/interview-caya/WhatsApp%20Video%202026-10-13%20at%2018.18.05.mp4`,
-    mediaAlt: 'Still uit het interview op Caya',
-    mediaType: 'video',
-    portrait: true,
-    poster: `${import.meta.env.BASE_URL}projecten/interview-caya/poster.jpg`,
-    categories: ['Content Creation'],
-    tags: ['Interview', 'Presentatie', 'Montage'],
-    link: `${import.meta.env.BASE_URL}projecten/interview-caya/WhatsApp%20Video%202026-10-13%20at%2018.18.05.mp4`,
-    linkLabel: 'Bekijk de video',
-  },
-  {
-    title: 'Interview op Bandanna',
-    kind: 'Videoreeks',
-    summary:
-      'Microfoon in de hand, feestsfeer op de achtergrond: op fuif Bandanna in Mol trok ik tussen de jongeren op zoek naar spontane antwoorden. Van het eerste idee tot de interviews voor de camera en de laatste knip in de montage: ik bracht deze aflevering van begin tot eind tot leven.',
-    role: 'Presentatie, interview, montage & idee-uitwerking',
-    mediaSrc: '',
-    mediaAlt: 'Still uit het interview op fuif Bandanna',
-    mediaType: 'youtube',
-    categories: ['Content Creation'],
-    tags: ['Interview', 'Presentatie', 'Montage'],
-    link: 'https://youtu.be/Qk5oyW6w3cc',
-    linkLabel: 'Bekijk op YouTube',
-    youtubeId: 'Qk5oyW6w3cc',
-  },
-  {
-    title: 'LA Travel Vlog',
-    kind: 'Travelvlog',
-    summary:
-      'Voor deze travelvlog uit Los Angeles stond ik zelf in voor zowel de opnames als de volledige montage.',
-    role: 'Opname & montage',
-    mediaSrc: '',
-    mediaAlt: 'Still uit de LA Travel Vlog',
-    mediaType: 'youtube',
-    categories: ['Content Creation'],
-    tags: ['Travel', 'Opname', 'Montage'],
-    link: 'https://youtu.be/75XDGQ8reys',
-    linkLabel: 'Bekijk op YouTube',
-    youtubeId: '75XDGQ8reys',
-  },
-  {
-    title: 'Porto Travel Vlog',
-    kind: 'Travelvlog',
-    summary:
-      'Voor deze travelvlog uit Porto stond ik zelf in voor zowel de beelden als de volledige montage.',
-    role: 'Opname & montage',
-    mediaSrc: '',
-    mediaAlt: 'Still uit de Porto Travel Vlog',
-    mediaType: 'youtube',
-    categories: ['Content Creation'],
-    tags: ['Travel', 'Opname', 'Montage'],
-    link: 'https://youtu.be/MIVGPq4eXsY',
-    linkLabel: 'Bekijk op YouTube',
-    youtubeId: 'MIVGPq4eXsY',
-  },
-  // Tijdelijk verborgen: Lissabon Travel Vlog.
-  // {
-  //   title: 'Lissabon Travel Vlog',
-  //   kind: 'Travelvlog',
-  //   summary:
-  //     'Voor deze travelvlog uit Lissabon stond ik zelf in voor zowel de beelden als de volledige montage.',
-  //   role: 'Opname & montage',
-  //   mediaSrc: '',
-  //   mediaAlt: 'Still uit de Lissabon Travel Vlog',
-  //   mediaType: 'youtube',
-  //   categories: ['Content Creation'],
-  //   tags: ['Travel', 'Opname', 'Montage'],
-  //   link: 'https://youtu.be/1WKM004EfDM',
-  //   linkLabel: 'Bekijk op YouTube',
-  //   youtubeId: '1WKM004EfDM',
-  // },
-  {
-    title: 'Wandelroute in de kijker: Kasteel Meylandt',
-    kind: 'Socialmediavideo',
-    summary:
-      'Tijdens mijn stage kreeg ik de opdracht om verschillende wandelroutes in De Wijers in de kijker te zetten. Voor deze video over Kasteel Meylandt verzorgde ik zelf de opnames, de volledige montage en de publicatie op sociale media.',
-    role: 'Opname, montage & social media',
-    mediaSrc: '',
-    mediaAlt: 'Still uit de video over de wandelroute bij Kasteel Meylandt',
-    mediaType: 'youtube-short',
-    categories: ['Content Creation'],
-    tags: ['De Wijers', 'Stage', 'Social Media'],
-    link: 'https://youtube.com/shorts/u-kUjV-_Gvo?feature=share',
-    linkLabel: 'Bekijk op YouTube',
-    youtubeId: 'u-kUjV-_Gvo',
-  },
-  {
-    title: 'Wandelroute in de kijker: Kelchterhoef',
-    kind: 'Socialmediavideo',
-    summary:
-      'Tijdens mijn stage zette ik ook de wandelroute in Kelchterhoef in de kijker. Ik verzorgde zelf de opnames, de volledige montage en de publicatie op sociale media.',
-    role: 'Opname, montage & social media',
-    mediaSrc: '',
-    mediaAlt: 'Still uit de video over de wandelroute in Kelchterhoef',
-    mediaType: 'youtube-short',
-    categories: ['Content Creation'],
-    tags: ['De Wijers', 'Stage', 'Social Media'],
-    link: 'https://youtube.com/shorts/94oh3a0RAQE',
-    linkLabel: 'Bekijk op YouTube',
-    youtubeId: '94oh3a0RAQE',
-  },
-  {
-    title: 'Wandelroute in de kijker',
-    kind: 'Socialmediavideo',
-    summary:
-      'Ook voor deze stagevideo zette ik een wandelroute in De Wijers in de kijker. Ik verzorgde zelf de opnames, de volledige montage en de publicatie op sociale media.',
-    role: 'Opname, montage & social media',
-    mediaSrc: '',
-    mediaAlt: 'Still uit een video over een wandelroute in De Wijers',
-    mediaType: 'youtube-short',
-    categories: ['Content Creation'],
-    tags: ['De Wijers', 'Stage', 'Social Media'],
-    link: 'https://youtube.com/shorts/Zt3qLUpgYpI',
-    linkLabel: 'Bekijk op YouTube',
-    youtubeId: 'Zt3qLUpgYpI',
-  },
-]
+// De projecten komen uit de CMS (collectie "projects"), de volgorde is het veld "Volgorde".
+const projects: ProjectItem[] = projectData.map((project) => {
+  const isVideo = project.mediaType === 'video'
+  const hasStill = project.mediaType === 'image' || project.mediaType === 'gallery'
+  return {
+    title: project.title,
+    kind: project.kind,
+    summary: project.summary,
+    role: project.role,
+    mediaSrc: isVideo ? withBase(project.videoPath) : hasStill ? (project.image ?? '') : '',
+    mediaAlt: project.mediaAlt,
+    mediaType: project.mediaType,
+    previewLink: project.previewLink ? withBase(project.previewLink) : undefined,
+    portrait: project.portrait || undefined,
+    poster: isVideo ? project.image : undefined,
+    gallery: project.gallery.length ? project.gallery : undefined,
+    youtubeId: project.youtubeId,
+    categories: [project.category],
+    tags: project.tags,
+    link: project.link ? withBase(project.link) : undefined,
+    linkLabel: project.linkLabel,
+    detail: project.detail,
+  }
+})
 
-const filterOptions: ProjectCategory[] = [
-  'Presentatie',
-  'Voice-over',
-  'Multicamera',
-  'Content Creation',
-]
+const filterOptions: ProjectCategory[] = projectCategories
 
 const filteredProjects = computed(() => {
   const activeFilters = projectFilters.value
@@ -701,7 +362,7 @@ watch(
                     :key="activeGalleryImage.src"
                     :src="activeGalleryImage.src"
                     :alt="activeGalleryImage.alt"
-                    :style="activeGalleryImage.src === pukkelpopStage ? { objectPosition: 'calc(50% + 55px) center' } : undefined"
+                    :style="activeGalleryImage.focus ? { objectPosition: activeGalleryImage.focus } : undefined"
                     loading="lazy"
                     decoding="async"
                     class="h-full w-full object-cover"

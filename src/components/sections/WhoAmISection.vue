@@ -3,26 +3,9 @@ import { computed, ref } from 'vue'
 import SlideSection from './SlideSection.vue'
 import PolaroidPhoto from '../ui/PolaroidPhoto.vue'
 
-import jokeImg from '../../assets/Joke.webp'
-import rmKerstImg from '../../assets/rm-kerst.webp'
-import jokeHavenImg from '../../assets/joke-aan-de-haven.webp'
-import jokeStadiumImg from '../../assets/joke-dodger-stadium.webp'
-import batacCameraImg from '../../assets/batac-camera.webp'
-import horstRegieImg from '../../assets/horst-regie.webp'
+import { whoAmI } from '../../content/site'
 
-type PhotoItem = {
-  src: string
-  alt: string
-}
-
-const photos: PhotoItem[] = [
-  { src: jokeImg, alt: 'Joke achter de mengtafel' },
-  { src: rmKerstImg, alt: 'Joke in kerstsfeer in de radiostudio' },
-  { src: jokeHavenImg, alt: 'Joke maakt een foto aan de haven' },
-  { src: jokeStadiumImg, alt: 'Joke op het veld van Dodger Stadium' },
-  { src: batacCameraImg, alt: 'Camerawerk tijdens BATAC' },
-  { src: horstRegieImg, alt: 'Aan de regietafel tijdens Horst Festival' }
-]
+const photos = whoAmI.photos
 
 const frontIndex = ref(0)
 const visibleDepth = 3
@@ -59,18 +42,9 @@ const showNextPhoto = () => {
   <SlideSection id="wie-ben-ik" aos="fade-right" :aos-delay="80" section-class="snap-start flex items-start py-2">
     <div class="grid h-full w-full items-center gap-5 lg:gap-4 lg:grid-cols-2">
       <div class="space-y-7 lg:pr-6">
-        <h2 class="mb-7 font-display text-[clamp(2.6rem,6.7vw,5.6rem)] leading-[0.92] tracking-[0.01em] uppercase">Wie ben ik?</h2>
-        <p class="max-w-[40ch] text-left md:text-justify text-[clamp(0.95rem,1.45vw,1.45rem)] leading-[1.45]">
-          Mijn naam is Joke, een vrolijke perfectionist. Elke zaterdag presenteer ik het programma ‘Blokke Met
-          Jokke’ op Radio Mol, een lokale radiozender. Vanaf het moment dat ik voor een micro sta, merk ik dat er
-          automatisch een knop omslaat in mijn hoofd. Ik sta aan en ga ervoor.
-        </p>
-        <p class="max-w-[40ch] text-left md:text-justify text-[clamp(0.95rem,1.45vw,1.45rem)] leading-[1.45]">
-          Die drive neem ik mee in alles wat ik doe. De voorbije jaren ben ik bewust op zoek gegaan naar
-          verschillende kanten van de mediawereld. Ik ontdekte dat voice-overs inspreken me enorm passioneert, dat
-          meewerken aan een multicameraproductie me een adrenalinekick geeft en dat content creation me blijft
-          fascineren. Zo groeide ik stap voor stap naar een veelzijdig profiel waarin ik mijn creativiteit,
-          enthousiasme en liefde voor media op verschillende manieren kwijt kan.
+        <h2 class="mb-7 font-display text-[clamp(2.6rem,6.7vw,5.6rem)] leading-[0.92] tracking-[0.01em] uppercase">{{ whoAmI.title }}</h2>
+        <p v-for="paragraph in whoAmI.paragraphs" :key="paragraph" class="max-w-[40ch] text-left md:text-justify text-[clamp(0.95rem,1.45vw,1.45rem)] leading-[1.45]">
+          {{ paragraph }}
         </p>
       </div>
 
@@ -85,13 +59,13 @@ const showNextPhoto = () => {
             :alt="photo.alt"
             wrapper-class="absolute inset-0 h-full w-full"
             rotate-class="!rotate-0"
-            :image-class="photo.src === jokeHavenImg ? 'object-[center_75%]' : 'object-center'"
+            :image-focus="photo.focus"
             :style="stackCardStyle(photo.depth)"
           />
           <span
             class="pointer-events-none absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs uppercase tracking-[0.14em] text-[#c80f12] opacity-80 transition group-hover:opacity-100"
           >
-            klik voor volgende foto
+            {{ whoAmI.nextPhotoHint }}
           </span>
         </div>
 

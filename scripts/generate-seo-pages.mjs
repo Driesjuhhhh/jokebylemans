@@ -1,151 +1,31 @@
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 
 const siteUrl = 'https://jokebylemans.be'
 const outputDir = new URL('../public/projecten/', import.meta.url)
 
-const projects = [
-  {
-    slug: 'interview-caya',
-    title: 'Interview op Caya',
-    category: 'Content creation',
-    role: 'Presentatie, interview, montage en idee-uitwerking',
-    description: 'Microfoon in de hand, festivalsfeer op de achtergrond en één vraag: klaar voor het nieuwe schooljaar? Voor deze Instagram-videoreeks zocht Joke op Caya spontane antwoorden bij jongeren. Ze werkte het idee uit, verzorgde de presentatie en interviews en monteerde de aflevering.',
-    mediaUrl: '/projecten/interview-caya/WhatsApp%20Video%202026-10-13%20at%2018.18.05.mp4',
-    mediaType: 'video',
-    image: '/projecten/interview-caya/poster.jpg',
-  },
-  {
-    slug: 'interview-bandanna',
-    title: 'Interview op Bandanna',
-    category: 'Content creation',
-    role: 'Presentatie, interview, montage en idee-uitwerking',
-    description: 'Microfoon in de hand, feestsfeer op de achtergrond: op fuif Bandanna in Mol ging Joke jongeren interviewen. Voor deze videoreeks zocht ze spontane antwoorden bij de feestgangers. Ze werkte het idee uit, verzorgde de presentatie en interviews en monteerde de aflevering.',
-    youtubeId: 'Qk5oyW6w3cc',
-    uploadDate: '2026-11-05T12:00:00+01:00',
-  },
-  {"slug": "blog-sound-of-silence", "title": "Blog: Sound of Silence", "category": "Content creation", "role": "Auteur", "description": "Deze blog schreef ik tijdens mijn opleiding Communicatie. Ik heb hier met plezier aan gewerkt.", "mediaUrl": "/media/blog-joke-bylemans.pdf", "mediaType": "pdf", "image": "/media/blog-joke-bylemans.jpg"},
-  {"slug": "booktok", "title": "BookTok", "category": "Content creation", "role": "Content creator", "description": "Ik kreeg de kans om een booktok te filmen. In deze video kon ik volledig mijn creativiteit kwijt. De manier waarop je een verhaal visueel kunt brengen, is hierbij superfijn!", "mediaUrl": "/media/joke-bylemans-booktok.mp4", "mediaType": "video", "image": "/media/joke-bylemans-booktok.jpg"},
-  {"slug": "video-joke-bylemans", "title": "Video Joke Bylemans", "category": "Content creation", "role": "Content creator", "description": "Deze video legt mijn passie voor radio, mijn hobby, uit. Wie is Joke achter de micro? Dat ontdek je hier!", "mediaUrl": "/media/video-joke-bylemans.mp4", "mediaType": "video", "image": "/media/video-joke-bylemans.jpg"},
-  {
-    slug: 'de-keizerspinguin',
-    title: 'De Keizerspinguin',
-    category: 'Voice-over',
-    role: 'Voice-over',
-    description: 'Een korte documentaire die Joke Bylemans insprak tijdens een workshop van Chris Dusauchoit.',
-  },
-  {
-    slug: 'de-wijers',
-    title: 'De Wijers',
-    category: 'Voice-over',
-    role: 'Voice-over in samenwerking met De Praeters',
-    description: 'Een natuurvideo over het ontstaan van De Wijers, ingesproken tijdens Joke haar stage bij Regionaal Landschap Lage Kempen.',
-  },
-  {
-    slug: 'lily-de-libel',
-    title: 'Lily De Libel',
-    category: 'Voice-over',
-    role: 'Stem van Lily de libel',
-    description: 'Een natuurwandeling op kinderformaat voor Tessenderlo-Ham, verteld door het personage Lily de libel.',
-  },
-  {
-    slug: '40-jaar-tsjernobyl',
-    title: '40 Jaar Tsjernobyl',
-    category: 'Presentatie en multicamera',
-    role: 'Presentatrice',
-    description: 'Een studiogesprek waarin Joke Bylemans met experten terugblikt op de kernramp van Tsjernobyl en de situatie vandaag.',
-    youtubeId: '5IJnxNpA8LE',
-    uploadDate: '2026-06-18T14:08:09-07:00',
-  },
-  {
-    slug: 'de-reconstructie',
-    title: 'De Reconstructie',
-    category: 'Multicamera',
-    role: 'Regisseur',
-    description: 'Een bekroond studio-misdaadprogramma en bachelorproef waarin kandidaat-speurders een misdaad reconstrueren.',
-    youtubeId: 'nw-miMTtIoU',
-    uploadDate: '2026-06-18T14:00:43-07:00',
-  },
-  {
-    slug: 'efp-nieuwsbericht',
-    title: 'EFP – Nieuwsbericht',
-    category: 'Presentatie en multicamera',
-    role: 'Productie, scenario en shotlist',
-    description: 'Een fictief nieuwsbericht voor een spelshow, met productie, scenario en shotlist door het team van Joke.',
-    youtubeId: 'NlrsdHlkavk',
-    uploadDate: '2026-06-18T14:28:43-07:00',
-  },
-  {
-    slug: 'battle-of-the-beats',
-    title: 'Battle of the Beats',
-    category: 'Multicamera',
-    role: 'Regisseur',
-    description: 'Een studio-muziekquiz waarin vier generaties hun muzikale kennis testen, geregisseerd door Joke Bylemans.',
-    youtubeId: 'XBqfetEI5As',
-    uploadDate: '2026-06-24T11:32:15-07:00',
-  },
-  {
-    slug: 'pukkelpop',
-    title: 'Pukkelpop',
-    category: 'Multicamera',
-    role: 'Livecameraoperator',
-    description: 'Op Pukkelpop 2026 werkte Joke Bylemans als cameraoperator mee aan de multicameralivestream op VRT MAX, met een gimbal, handycam en PTZ-camera’s.',
-  },
-  {
-    slug: 'la-travel-vlog',
-    title: 'LA Travel Vlog',
-    category: 'Content creation',
-    role: 'Opname en montage',
-    description: 'Een travelvlog uit Los Angeles waarvoor Joke zelf de beelden en de volledige montage verzorgde.',
-    youtubeId: '75XDGQ8reys',
-    uploadDate: '2026-09-03T13:14:05-07:00',
-  },
-  {
-    slug: 'porto-travel-vlog',
-    title: 'Porto Travel Vlog',
-    category: 'Content creation',
-    role: 'Opname en montage',
-    description: 'Een travelvlog uit Porto waarvoor Joke zelf de beelden en de volledige montage verzorgde.',
-    youtubeId: 'MIVGPq4eXsY',
-    uploadDate: '2026-09-03T13:17:24-07:00',
-  },
-  // Tijdelijk verborgen: Lissabon Travel Vlog.
-  // {
-  //   slug: 'lissabon-travel-vlog',
-  //   title: 'Lissabon Travel Vlog',
-  //   category: 'Content creation',
-  //   role: 'Opname en montage',
-  //   description: 'Een travelvlog uit Lissabon waarvoor Joke zelf de beelden en de volledige montage verzorgde.',
-  //   youtubeId: '1WKM004EfDM',
-  //   uploadDate: '2026-09-03T13:19:29-07:00',
-  // },
-  {
-    slug: 'wandelroute-kasteel-meylandt',
-    title: 'Wandelroute in de kijker: Kasteel Meylandt',
-    category: 'Content creation',
-    role: 'Opname, montage en social media',
-    description: 'Een stagevideo die de wandelroute bij Kasteel Meylandt in De Wijers in de kijker zet.',
-    youtubeId: 'u-kUjV-_Gvo',
-    uploadDate: '2026-09-03T13:23:38-07:00',
-  },
-  {
-    slug: 'wandelroute-kelchterhoef',
-    title: 'Wandelroute in de kijker: Kelchterhoef',
-    category: 'Content creation',
-    role: 'Opname, montage en social media',
-    description: 'Een stagevideo die de wandelroute in Kelchterhoef in De Wijers in de kijker zet.',
-    youtubeId: '94oh3a0RAQE',
-    uploadDate: '2026-09-03T13:28:32-07:00',
-  },
-  {
-    slug: 'wandelroute-de-wijers',
-    title: 'Wandelroute in de kijker',
-    category: 'Content creation',
-    role: 'Opname, montage en social media',
-    description: 'Een stagevideo waarin Joke een wandelroute in De Wijers filmt, monteert en publiceert op sociale media.',
-    youtubeId: 'Zt3qLUpgYpI',
-    uploadDate: '2026-09-03T13:27:09-07:00',
-  },
-]
+// De projecten komen uit de CMS (via scripts/build-content.mjs -> src/generated/site-content.json).
+const content = JSON.parse(await readFile(new URL('../src/generated/site-content.json', import.meta.url), 'utf-8'))
+const abs = (path) => (path && /^https?:\/\//.test(path) ? path : path ? `${siteUrl}${path.startsWith('/') ? '' : '/'}${path}` : undefined)
+const encodePath = (path) => (path ? encodeURI(path) : path)
+
+const projects = content.projects
+  .filter((project) => project.visible)
+  .map((project) => {
+    const isPdf = Boolean(project.previewLink && project.previewLink.toLowerCase().endsWith('.pdf'))
+    return {
+      slug: project.slug,
+      title: project.title,
+      category: project.category,
+      role: project.role,
+      description: project.seo?.description || project.summary,
+      seoTitle: project.seo?.title,
+      mediaUrl: encodePath(isPdf ? project.previewLink : project.videoPath),
+      mediaType: isPdf ? 'pdf' : project.videoPath ? 'video' : undefined,
+      image: project.image,
+      youtubeId: project.youtubeId,
+      uploadDate: project.youtubeUploadDate,
+    }
+  })
 
 const escapeHtml = (value) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;')
 
@@ -173,11 +53,11 @@ await mkdir(outputDir, { recursive: true })
 
 for (const project of projects) {
   const canonical = `${siteUrl}/projecten/${project.slug}/`
-  const image = project.image ? `${siteUrl}${project.image}` : project.youtubeId ? `https://i.ytimg.com/vi/${project.youtubeId}/hqdefault.jpg` : `${siteUrl}/og-joke-bylemans.jpg`
+  const image = project.image ? abs(project.image) : project.youtubeId ? `https://i.ytimg.com/vi/${project.youtubeId}/hqdefault.jpg` : `${siteUrl}/og-joke-bylemans.jpg`
   const videoMarkup = project.mediaType === 'pdf'
     ? `<p><a href="${project.mediaUrl}" target="_blank" rel="noopener noreferrer">Lees de blog (PDF)</a></p><a href="${project.mediaUrl}" target="_blank" rel="noopener noreferrer"><img src="${project.image}" alt="Eerste pagina van de blog" style="display:block;max-width:100%;max-height:700px" /></a>`
     : project.mediaType === 'video'
-    ? `<video controls playsinline preload="metadata" poster="${project.image}" src="${project.mediaUrl}" aria-label="${escapeHtml(project.title)}" style="display:block;width:100%;max-height:75vh;background:#111;border-radius:20px"></video>`
+    ? `<video controls playsinline preload="metadata"${project.image ? ` poster="${project.image}"` : ''} src="${project.mediaUrl}" aria-label="${escapeHtml(project.title)}" style="display:block;width:100%;max-height:75vh;background:#111;border-radius:20px"></video>`
     : project.youtubeId
     ? `<div class="video"><iframe src="https://www.youtube.com/embed/${project.youtubeId}?rel=0&cc_load_policy=0" title="${escapeHtml(project.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`
     : `<p><a href="${siteUrl}/#projecten">Bekijk en beluister dit project in het portfolio.</a></p>`
@@ -193,7 +73,7 @@ for (const project of projects) {
       }).replaceAll('<', '\\u003c')}</script>`
     : ''
 
-  const html = `<!doctype html><html lang="nl-BE"><head>${sharedHead(`${project.title} | Joke Bylemans`, project.description, canonical, image)}${videoJsonLd}</head><body><main><a class="back" href="/projecten/">← Alle projecten</a><article><p class="eyebrow">${escapeHtml(project.category)}</p><h1>${escapeHtml(project.title)}</h1><p class="lead">${escapeHtml(project.description)}</p><p class="role">Rol van Joke: ${escapeHtml(project.role)}</p>${videoMarkup}</article></main></body></html>`
+  const html = `<!doctype html><html lang="nl-BE"><head>${sharedHead(project.seoTitle ?? `${project.title} | Joke Bylemans`, project.description, canonical, image)}${videoJsonLd}</head><body><main><a class="back" href="/projecten/">← Alle projecten</a><article><p class="eyebrow">${escapeHtml(project.category)}</p><h1>${escapeHtml(project.title)}</h1><p class="lead">${escapeHtml(project.description)}</p><p class="role">Rol van Joke: ${escapeHtml(project.role)}</p>${videoMarkup}</article></main></body></html>`
   const projectDir = new URL(`./${project.slug}/`, outputDir)
   await mkdir(projectDir, { recursive: true })
   await writeFile(new URL('./index.html', projectDir), html)

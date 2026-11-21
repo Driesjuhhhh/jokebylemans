@@ -3,31 +3,15 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import SlideSection from './SlideSection.vue'
 import PolaroidPhoto from '../ui/PolaroidPhoto.vue'
 
-import radioImage from '../../assets/rm-mic.webp'
-import rmAverageRobImage from '../../assets/rm-average-rob.webp'
-import rmKerstSilkeImage from '../../assets/rm-kerst-silke.webp'
-import rmLotteAnneImage from '../../assets/rm-lotte-anne.webp'
+import { radio, siteInfo } from '../../content/site'
 
 const emit = defineEmits<{
   (event: 'listen-now'): void
 }>()
 
-const radioInstagramShots = [
-  {
-    src: rmAverageRobImage,
-    alt: 'Rob tijdens Radio Mol uitzending',
-  },
-  {
-    src: rmKerstSilkeImage,
-    alt: 'Silke tijdens een opname bij Radio Mol',
-  },
-  {
-    src: rmLotteAnneImage,
-    alt: 'Lotte en Anne op Radio Mol',
-  },
-]
-
-const radioMolUrl = 'https://www.radiomol.be/programma/blokkemetjokke'
+const radioInstagramShots = radio.photos
+const radioImage = radio.image
+const radioMolUrl = radio.programUrl
 
 const brusselsNow = ref(new Date())
 
@@ -53,7 +37,7 @@ const isLiveNow = computed(() => {
 })
 
 const liveStatusLabel = computed(() =>
-  isLiveNow.value ? 'Live now' : 'Elke zaterdag 15:00 - 16:00'
+  isLiveNow.value ? 'Live now' : radio.scheduleLabel
 )
 
 function showIframePlayer() {
@@ -84,17 +68,11 @@ onBeforeUnmount(() => {
       <div class="relative grid h-full w-full items-center gap-8 lg:grid-cols-2">
         <article class="order-1 space-y-7 lg:order-2 lg:pl-12">
           <h2 class="mb-7 font-display text-[clamp(2.6rem,6.7vw,5.6rem)] leading-[0.92] tracking-[0.01em] uppercase">
-            Radio Mol
+            {{ radio.title }}
           </h2>
 
-          <p class="radio-copy max-w-[40ch] text-left md:text-justify text-[clamp(0.95rem,1.45vw,1.45rem)] leading-[1.45]">
-            Elke zaterdag presenteer ik het radioprogramma ‘Blokke Met Jokke’ op Radio Mol. Dit is echt een hobby
-            geworden waar ik mezelf volledig in kan uitleven.
-          </p>
-
-          <p class="radio-copy max-w-[40ch] text-left md:text-justify text-[clamp(0.95rem,1.45vw,1.45rem)] leading-[1.45]">
-            In mijn programma steek ik studenten een hart onder de riem. Ik deel bloktips, weetjes over muziek en
-            zeker ook tips om te ontspannen naast het studeren.
+          <p v-for="paragraph in radio.paragraphs" :key="paragraph" class="radio-copy max-w-[40ch] text-left md:text-justify text-[clamp(0.95rem,1.45vw,1.45rem)] leading-[1.45]">
+            {{ paragraph }}
           </p>
 
           <div class="flex flex-wrap items-center gap-2">
@@ -132,7 +110,7 @@ onBeforeUnmount(() => {
           <div class="z-10 h-[170px] w-[min(84vw,320px)] overflow-hidden rounded-2xl border border-red-700/20 bg-white p-1.5 shadow-[0_12px_22px_rgba(0,0,0,0.13)] min-[420px]:h-[210px] min-[420px]:w-[300px] md:h-[250px] md:w-[340px] lg:absolute lg:left-2 lg:top-16 lg:h-[250px] lg:w-[250px] xl:left-8 xl:top-14 xl:h-[340px] xl:w-[340px]">
             <img
               :src="radioImage"
-              alt="Joke presenteert in de radiostudio"
+              :alt="radio.imageAlt"
               loading="lazy"
               decoding="async"
               class="h-full w-full rounded-xl object-cover"
@@ -151,13 +129,13 @@ onBeforeUnmount(() => {
       <section class="space-y-5 border-t border-red-700/25 pt-8">
         <div class="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h3 class="font-display text-[clamp(1.8rem,4.8vw,3.2rem)] leading-[0.95] uppercase">Achter de micro</h3>
+            <h3 class="font-display text-[clamp(1.8rem,4.8vw,3.2rem)] leading-[0.95] uppercase">{{ radio.galleryTitle }}</h3>
             <p class="mt-2 max-w-[56ch] text-[0.97rem] leading-[1.5] text-red-700/85">
-              Een paar spontane momenten van Radio Mol — volg er meer op Instagram.
+              {{ radio.galleryText }}
             </p>
           </div>
           <a
-            href="https://www.instagram.com/blokkemetjokke/"
+            :href="siteInfo.instagramUrl"
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center gap-2 rounded-full border border-red-700 px-4 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-red-700 transition hover:bg-red-700 hover:text-[#f7ebe2]"

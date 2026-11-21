@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { siteInfo } from '../content/site'
+
 const links = [
   { href: '#wie-ben-ik', label: 'Wie ben ik' },
   { href: '#opleiding', label: 'Opleiding' },
@@ -15,7 +17,7 @@ const links = [
         href="#hero"
         class="font-signature text-[clamp(1.6rem,2.4vw,2.5rem)] uppercase leading-none tracking-[0.04em] text-transparent [-webkit-text-stroke:1.7px_#c80f12]"
       >
-        <span>Joke</span><span class="hidden md:inline"> Bylemans</span>
+        <span>{{ siteInfo.name.split(' ')[0] }}</span><span class="hidden md:inline"> {{ siteInfo.name.split(' ').slice(1).join(' ') }}</span>
       </a>
 
       <ul class="order-2 ml-auto flex min-w-0 items-center justify-end gap-3 overflow-x-auto md:order-2 md:ml-0 md:gap-4 md:overflow-visible">
@@ -32,7 +34,7 @@ const links = [
       <ul class="order-2 ml-auto hidden items-center gap-2 md:order-3 md:ml-0 md:flex">
         <li>
           <a
-            href="https://www.instagram.com/blokkemetjokke/"
+            :href="siteInfo.instagramUrl"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
@@ -47,7 +49,7 @@ const links = [
         </li>
         <li>
           <a
-            href="https://www.linkedin.com/in/joke-bylemans-04088025b/"
+            :href="siteInfo.linkedinUrl"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
